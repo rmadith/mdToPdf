@@ -1,7 +1,7 @@
 import React from 'react'
 import { Document, Page, Text, View, Link, Image } from '@react-pdf/renderer'
 import { getStylesForPreset, getPageSize, getDefaultMargins } from './styles'
-import type { StylePreset } from '../markdown/types'
+import type { StylePresetExtended } from '../markdown/types'
 
 interface PDFDocumentProps {
   html: string
@@ -14,7 +14,7 @@ interface PDFDocumentProps {
     bottom?: number
     left?: number
   }
-  stylePreset?: StylePreset
+  stylePreset?: StylePresetExtended
   metadata?: {
     title?: string
     author?: string

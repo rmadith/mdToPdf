@@ -11,6 +11,11 @@ Transform your Markdown documents into beautifully formatted PDFs with extended 
 
 - **Real-time Preview** - See your markdown rendered as you type
 - **Multiple Style Presets** - GitHub, Academic, Modern, and Minimal themes
+- **🎨 Custom Themes** - Create, edit, and manage your own PDF themes
+  - Visual theme editor with live preview
+  - Control colors, typography, and spacing
+  - Import/Export themes as JSON
+  - localStorage persistence
 - **Extended Markdown Support**
   - 🧮 Math formulas with LaTeX (KaTeX)
   - 💻 Syntax highlighting for code blocks  
@@ -51,8 +56,20 @@ npm run dev
 
 1. **Type or paste** your markdown in the editor
 2. **See live preview** of the rendered content
-3. **View PDF preview** in real-time
-4. **Download PDF** when ready
+3. **Choose or create a theme** using the theme selector
+4. **View PDF preview** in real-time
+5. **Download PDF** when ready
+
+### Custom Themes
+
+Create your own custom PDF themes:
+
+1. Click the **➕** button next to the theme selector
+2. Customize colors, typography, and spacing in the theme editor
+3. Save and use your theme for PDF generation
+4. Export themes as JSON to share with your team
+
+See the [Custom Themes Guide](docs/CUSTOM_THEMES.md) for detailed documentation.
 
 ### As an Embeddable Module
 

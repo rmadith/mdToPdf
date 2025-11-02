@@ -9,5 +9,6 @@ export {
   academicStyles,
   modernStyles,
   minimalStyles,
+  createCustomStyles,
 } from './styles'
 

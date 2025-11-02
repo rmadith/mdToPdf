@@ -1,5 +1,7 @@
 import { StyleSheet } from '@react-pdf/renderer'
 import type { StylePreset } from '../markdown/types'
+import type { CustomTheme, StylePresetExtended } from '../theme-types'
+import { ThemeManager } from '../theme-manager'
 
 // Base styles shared across all presets
 const baseStyles = {
@@ -328,11 +330,140 @@ const minimalStyles = StyleSheet.create({
 })
 
 /**
- * Get PDF styles for a specific preset
- * @param preset - Style preset name
+ * Create custom styles from a theme configuration
+ * @param theme - Custom theme configuration
+ * @returns StyleSheet for the custom theme
+ */
+export function createCustomStyles(theme: CustomTheme) {
+  return StyleSheet.create({
+    page: {
+      fontFamily: theme.typography.fontFamily,
+      fontSize: theme.typography.fontSize,
+      lineHeight: theme.typography.lineHeight,
+      backgroundColor: theme.colors.pageBackground,
+      color: theme.colors.textColor,
+    },
+    heading1: {
+      fontSize: theme.typography.heading1Size,
+      fontWeight: 'bold' as const,
+      marginBottom: theme.spacing.heading1MarginBottom,
+      marginTop: theme.spacing.heading1MarginTop,
+      color: theme.colors.heading1Color || theme.colors.textColor,
+    },
+    heading2: {
+      fontSize: theme.typography.heading2Size,
+      fontWeight: 'bold' as const,
+      marginBottom: theme.spacing.heading2MarginBottom,
+      marginTop: theme.spacing.heading2MarginTop,
+      color: theme.colors.heading2Color || theme.colors.textColor,
+    },
+    heading3: {
+      fontSize: theme.typography.heading3Size,
+      fontWeight: 'bold' as const,
+      marginBottom: theme.spacing.heading3MarginBottom,
+      marginTop: theme.spacing.heading3MarginTop,
+      color: theme.colors.heading3Color || theme.colors.textColor,
+    },
+    heading4: {
+      fontSize: theme.typography.heading4Size,
+      fontWeight: 'bold' as const,
+      marginBottom: 6,
+      marginTop: 12,
+      color: theme.colors.heading4Color || theme.colors.textColor,
+    },
+    heading5: {
+      fontSize: theme.typography.heading5Size,
+      fontWeight: 'bold' as const,
+      marginBottom: 4,
+      marginTop: 10,
+    },
+    heading6: {
+      fontSize: theme.typography.heading6Size,
+      fontWeight: 'bold' as const,
+      marginBottom: 4,
+      marginTop: 8,
+    },
+    paragraph: {
+      marginBottom: theme.spacing.paragraphMarginBottom,
+    },
+    strong: {
+      fontWeight: 'bold' as const,
+    },
+    emphasis: {
+      fontStyle: 'italic' as const,
+    },
+    link: {
+      color: theme.colors.linkColor,
+      textDecoration: 'underline' as const,
+    },
+    list: {
+      marginBottom: theme.spacing.listMarginBottom,
+      marginLeft: theme.spacing.listMarginLeft,
+    },
+    listItem: {
+      marginBottom: 4,
+    },
+    blockquote: {
+      marginLeft: theme.spacing.blockquoteMarginLeft,
+      marginRight: 20,
+      marginBottom: 10,
+      paddingLeft: theme.spacing.blockquotePaddingLeft,
+      fontStyle: 'italic' as const,
+      borderLeftWidth: 4,
+      borderLeftColor: theme.colors.blockquoteBorderColor,
+      backgroundColor: theme.colors.blockquoteBackground,
+      color: theme.colors.blockquoteTextColor || theme.colors.textColor,
+    },
+    code: {
+      fontFamily: theme.typography.codeFontFamily,
+      fontSize: theme.typography.codeFontSize,
+      backgroundColor: theme.colors.codeBackground,
+      color: theme.colors.codeTextColor,
+      padding: 2,
+    },
+    codeBlock: {
+      fontFamily: theme.typography.codeFontFamily,
+      fontSize: theme.typography.codeBlockFontSize,
+      backgroundColor: theme.colors.codeBlockBackground,
+      color: theme.colors.codeBlockTextColor,
+      padding: theme.spacing.codeBlockPadding,
+      marginBottom: 10,
+      borderRadius: 4,
+    },
+    table: {
+      marginBottom: 10,
+    },
+    tableRow: {
+      flexDirection: 'row' as const,
+    },
+    tableCell: {
+      border: `1px solid ${theme.colors.tableBorderColor}`,
+      padding: 8,
+      flex: 1,
+    },
+    tableCellHeader: {
+      backgroundColor: theme.colors.tableHeaderBackground,
+      fontWeight: 'bold' as const,
+    },
+    horizontalRule: {
+      marginVertical: 15,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.horizontalRuleColor,
+    },
+    image: {
+      maxWidth: '100%',
+      marginBottom: 10,
+    },
+  })
+}
+
+/**
+ * Get PDF styles for a specific preset (including custom themes)
+ * @param preset - Style preset name or custom theme ID
  * @returns StyleSheet for the preset
  */
-export function getStylesForPreset(preset: StylePreset) {
+export function getStylesForPreset(preset: StylePresetExtended) {
+  // Check if it's a built-in preset
   switch (preset) {
     case 'github':
       return githubStyles
@@ -342,9 +473,16 @@ export function getStylesForPreset(preset: StylePreset) {
       return modernStyles
     case 'minimal':
       return minimalStyles
-    default:
-      return modernStyles
   }
+
+  // Check if it's a custom theme
+  const customTheme = ThemeManager.getTheme(preset)
+  if (customTheme) {
+    return createCustomStyles(customTheme)
+  }
+
+  // Default to modern
+  return modernStyles
 }
 
 /**
@@ -378,6 +516,6 @@ export function getDefaultMargins() {
   }
 }
 
-// Export all style presets
+// Export all style presets and utilities
 export { githubStyles, academicStyles, modernStyles, minimalStyles }
 

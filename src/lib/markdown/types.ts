@@ -25,8 +25,8 @@ export interface PDFConfig {
     bottom?: number
     left?: number
   }
-  /** Style preset */
-  stylePreset?: StylePreset
+  /** Style preset (can be built-in or custom theme ID) */
+  stylePreset?: StylePresetExtended
   /** Document title */
   title?: string
   /** Document author */
@@ -36,6 +36,7 @@ export interface PDFConfig {
 }
 
 export type StylePreset = 'github' | 'academic' | 'modern' | 'minimal'
+export type StylePresetExtended = StylePreset | string
 
 export interface ParsedMarkdown {
   /** HTML string of parsed markdown */

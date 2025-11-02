@@ -1,6 +1,7 @@
 import { pdf } from '@react-pdf/renderer'
 import type { PDFGenerationOptions, PDFResult } from './types'
 import { createPDFDocument } from '../pdf/document'
+import { prepareMarkdownForPDF } from '../emoji-handler'
 
 /**
  * Generate a PDF from parsed markdown HTML
@@ -23,10 +24,13 @@ export async function generatePDF(
       subject,
     } = options
 
+    // Clean markdown of emojis (PDF fonts don't support them)
+    const cleanMarkdown = prepareMarkdownForPDF(markdown, 'remove')
+
     // Create the PDF document component
     const document = createPDFDocument({
       html,
-      markdown,
+      markdown: cleanMarkdown,
       pageSize,
       orientation,
       margins,

@@ -6,7 +6,7 @@ import { Toolbar, TEMPLATES } from "@/components/toolbar"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import type { StylePreset } from "@/lib/markdown/types"
+import type { StylePresetExtended } from "@/lib/markdown/types"
 import { preloadCriticalChunks } from "@/lib/dynamic-loader"
 import { loadMarkdown, saveMarkdown, clearMarkdown } from "@/lib/storage-manager"
 
@@ -85,7 +85,7 @@ export default function AppContent() {
   const [markdown, setMarkdown] = useState<string>("")
   const [parsedHtml, setParsedHtml] = useState<string>("")
   const [parsing, setParsing] = useState(false)
-  const [stylePreset, setStylePreset] = useState<StylePreset>("modern")
+  const [stylePreset, setStylePreset] = useState<StylePresetExtended>("modern")
   const [pageSize, setPageSize] = useState<"A4" | "Letter" | "Legal">("A4")
   const [activeTab, setActiveTab] = useState<string>("editor")
   const [mounted, setMounted] = useState(false)
