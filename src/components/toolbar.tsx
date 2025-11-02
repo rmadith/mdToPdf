@@ -210,7 +210,7 @@ export function Toolbar({
         variant="ghost"
         size="sm"
         onClick={onClear}
-        className="h-9 rounded-full border border-white/10 bg-white/5 px-4 text-[11px] uppercase tracking-[0.3em] text-slate-400 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-slate-100"
+        className="h-9 rounded-full border border-white/10 bg-white/5 px-4 text-[11px] uppercase tracking-[0.3em] text-slate-400 transition-all duration-200 hover:scale-105 hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-300 hover:shadow-[0_0_20px_-10px_rgba(239,68,68,0.5)]"
       >
         Clear
       </Button>

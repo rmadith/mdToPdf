@@ -216,7 +216,7 @@ export default function AppContent() {
                 <Button
                   type="button"
                   onClick={() => handleLoadTemplate("technical")}
-                  className="rounded-full border border-cyan-400/40 bg-cyan-500/10 px-6 py-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-cyan-200 shadow-[0_10px_40px_-30px_rgba(56,189,248,0.6)] transition hover:border-cyan-300/60 hover:bg-cyan-500/20"
+                  className="rounded-full border border-cyan-400/40 bg-cyan-500/10 px-6 py-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-cyan-200 shadow-[0_10px_40px_-30px_rgba(56,189,248,0.6)] transition-all duration-200 hover:scale-105 hover:border-cyan-300/60 hover:bg-cyan-500/20 hover:shadow-[0_10px_40px_-20px_rgba(56,189,248,0.8)]"
                 >
                   Load technical template
                 </Button>
@@ -224,14 +224,14 @@ export default function AppContent() {
                   type="button"
                   onClick={() => handleLoadTemplate("resume")}
                   variant="ghost"
-                  className="rounded-full border border-white/10 bg-white/[0.05] px-5 py-2 text-[11px] uppercase tracking-[0.3em] text-slate-300 transition hover:border-white/30 hover:bg-white/10 hover:text-slate-100"
+                  className="rounded-full border border-white/10 bg-white/[0.05] px-5 py-2 text-[11px] uppercase tracking-[0.3em] text-slate-300 transition-all duration-200 hover:scale-105 hover:border-white/30 hover:bg-white/10 hover:text-slate-100"
                 >
                   Load resume template
                 </Button>
                 <Button
                   asChild
                   variant="ghost"
-                  className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-2 text-[11px] uppercase tracking-[0.3em] text-slate-300 transition hover:border-white/30 hover:bg-white/10 hover:text-slate-100"
+                  className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-2 text-[11px] uppercase tracking-[0.3em] text-slate-300 transition-all duration-200 hover:scale-105 hover:border-white/30 hover:bg-white/10 hover:text-slate-100"
                 >
                   <Link href="https://developers.cloudflare.com/sandbox/" target="_blank" rel="noreferrer">
                     Read sandbox docs ↗
