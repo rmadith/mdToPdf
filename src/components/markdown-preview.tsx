@@ -1,7 +1,8 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import { Loader2 } from "lucide-react"
+import { initializeMermaid } from "@/lib/dynamic-loader"
 
 interface MarkdownPreviewProps {
   html: string
@@ -9,6 +10,22 @@ interface MarkdownPreviewProps {
 }
 
 export const MarkdownPreview = React.memo(function MarkdownPreview({ html, loading = false }: MarkdownPreviewProps) {
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // Initialize mermaid diagrams after content is rendered
+    if (html && contentRef.current) {
+      // Small delay to ensure DOM is fully updated
+      const timer = setTimeout(() => {
+        initializeMermaid().catch((error) => {
+          console.error('Failed to render mermaid diagrams:', error)
+        })
+      }, 100)
+
+      return () => clearTimeout(timer)
+    }
+  }, [html])
+
   return (
     <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-[#0b1020]/60 backdrop-blur">
       <div className="border-b border-white/10 px-4 py-2.5">
@@ -27,6 +44,7 @@ export const MarkdownPreview = React.memo(function MarkdownPreview({ html, loadi
           </div>
         ) : html ? (
           <div
+            ref={contentRef}
             className="prose prose-sm max-w-none animate-in fade-in duration-300 text-slate-200 dark:prose-invert prose-headings:text-slate-100 prose-headings:transition-colors prose-strong:text-slate-100 prose-code:text-cyan-200 prose-code:bg-cyan-500/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-xs prose-pre:bg-[#070b17] prose-pre:text-slate-100 prose-pre:border prose-pre:border-white/10 prose-pre:shadow-inner prose-blockquote:border-l-cyan-400/50 prose-blockquote:bg-cyan-500/5 prose-blockquote:py-0.5 prose-a:text-cyan-300 prose-a:no-underline prose-a:transition-colors hover:prose-a:text-cyan-200"
             dangerouslySetInnerHTML={{ __html: html }}
           />

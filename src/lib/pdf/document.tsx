@@ -20,6 +20,7 @@ interface PDFDocumentProps {
     author?: string
     subject?: string
   }
+  mermaidDiagrams?: string[]
 }
 
 /**
@@ -35,6 +36,7 @@ export function createPDFDocument(props: PDFDocumentProps) {
     margins,
     stylePreset = 'modern',
     metadata = {},
+    mermaidDiagrams = [],
   } = props
 
   const styles = getStylesForPreset(stylePreset)
@@ -52,7 +54,7 @@ export function createPDFDocument(props: PDFDocumentProps) {
     : pageDimensions
 
   // Parse markdown into renderable elements
-  const elements = parseMarkdownToElements(markdown, styles)
+  const elements = parseMarkdownToElements(markdown, styles, mermaidDiagrams)
 
   return (
     <Document
@@ -80,16 +82,19 @@ export function createPDFDocument(props: PDFDocumentProps) {
  * Parse markdown text into React PDF elements
  * @param markdown - Raw markdown text
  * @param styles - Style sheet
+ * @param mermaidDiagrams - Array of rendered mermaid diagram data URIs
  * @returns Array of React PDF elements
  */
-function parseMarkdownToElements(markdown: string, styles: any): React.ReactNode[] {
+function parseMarkdownToElements(markdown: string, styles: any, mermaidDiagrams: string[] = []): React.ReactNode[] {
   const elements: React.ReactNode[] = []
   const lines = markdown.split('\n')
   let inCodeBlock = false
   let codeBlockContent: string[] = []
+  let codeBlockLanguage = ''
   let inList = false
   let listItems: string[] = []
   let currentParagraph: string[] = []
+  let mermaidIndex = 0
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
@@ -98,17 +103,38 @@ function parseMarkdownToElements(markdown: string, styles: any): React.ReactNode
     if (line.trim().startsWith('```')) {
       if (inCodeBlock) {
         // End code block
-        elements.push(
-          <View key={`code-${i}`} style={styles.codeBlock}>
-            <Text>{codeBlockContent.join('\n')}</Text>
-          </View>
-        )
+        if (codeBlockLanguage === 'mermaid' && mermaidIndex < mermaidDiagrams.length) {
+          // Render mermaid diagram as image
+          elements.push(
+            <View key={`mermaid-${i}`} style={styles.mermaidDiagram}>
+              <Image
+                src={mermaidDiagrams[mermaidIndex]}
+                style={{ 
+                  width: '100%',
+                  objectFit: 'contain',
+                }}
+              />
+            </View>
+          )
+          mermaidIndex++
+        } else {
+          // Regular code block
+          elements.push(
+            <View key={`code-${i}`} style={styles.codeBlock}>
+              <Text>{codeBlockContent.join('\n')}</Text>
+            </View>
+          )
+        }
         codeBlockContent = []
+        codeBlockLanguage = ''
         inCodeBlock = false
       } else {
         // Start code block
         flushParagraph()
         inCodeBlock = true
+        // Extract language identifier
+        const langMatch = line.trim().match(/```(\w+)/)
+        codeBlockLanguage = langMatch ? langMatch[1] : ''
       }
       continue
     }

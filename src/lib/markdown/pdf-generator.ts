@@ -2,6 +2,7 @@ import { pdf } from '@react-pdf/renderer'
 import type { PDFGenerationOptions, PDFResult } from './types'
 import { createPDFDocument } from '../pdf/document'
 import { prepareMarkdownForPDF } from '../emoji-handler'
+import { extractAndRenderMermaidDiagrams, getMermaidDataUris } from '../mermaid-renderer'
 
 /**
  * Generate a PDF from parsed markdown HTML
@@ -27,6 +28,10 @@ export async function generatePDF(
     // Clean markdown of emojis (PDF fonts don't support them)
     const cleanMarkdown = prepareMarkdownForPDF(markdown, 'remove')
 
+    // Extract and render mermaid diagrams
+    const mermaidDiagramMap = await extractAndRenderMermaidDiagrams(cleanMarkdown)
+    const mermaidDataUris = await getMermaidDataUris(mermaidDiagramMap)
+
     // Create the PDF document component
     const document = createPDFDocument({
       html,
@@ -40,6 +45,7 @@ export async function generatePDF(
         author: author || 'Markdown to PDF Converter',
         subject: subject || 'Generated from Markdown',
       },
+      mermaidDiagrams: mermaidDataUris,
     })
 
     // Generate the PDF blob

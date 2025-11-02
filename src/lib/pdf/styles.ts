@@ -87,6 +87,17 @@ const baseStyles = {
     marginBottom: 10,
     borderRadius: 4,
   },
+  mermaidDiagram: {
+    marginBottom: 30,
+    marginTop: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ffffff',
+    borderRadius: 4,
+    border: '1px solid #e2e8f0',
+  },
   table: {
     marginBottom: 10,
   },

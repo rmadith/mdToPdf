@@ -20,6 +20,7 @@ Transform your Markdown documents into beautifully formatted PDFs with extended 
   - 🧮 Math formulas with LaTeX (KaTeX)
   - 💻 Syntax highlighting for code blocks  
   - 📊 Tables and GitHub Flavored Markdown
+  - 🔀 Mermaid diagrams (flowcharts, sequence diagrams, etc.)
   - 🔗 Links, images, and blockquotes
 - **Professional PDFs** - Export publication-ready documents
 - **Dark Mode** - Full dark mode support with system preference detection
@@ -306,8 +307,8 @@ Have an idea? We'd love to hear it! Open a feature request on [GitHub Issues](ht
 - [x] Math formula support with KaTeX
 - [x] Syntax highlighting for code blocks
 - [x] Export/import theme system
+- [x] Mermaid diagram support
 - [ ] Web Workers for markdown parsing
-- [ ] Mermaid diagram support
 - [ ] PDF watermark support
 - [ ] Batch conversion
 - [ ] Browser extension

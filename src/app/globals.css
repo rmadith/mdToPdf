@@ -359,4 +359,23 @@
       transition-duration: 0.01ms !important;
     }
   }
+  
+  /* Mermaid diagram styles */
+  .mermaid-diagram {
+    @apply my-6 rounded-lg bg-[#0b1020]/80 p-6 border border-white/10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: auto;
+  }
+  
+  .mermaid-diagram svg {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Ensure mermaid diagrams work well in the prose container */
+  .prose .mermaid-diagram {
+    @apply max-w-full;
+  }
 }
