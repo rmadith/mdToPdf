@@ -72,9 +72,9 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
   )
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-[#0b1020]/60 backdrop-blur">
-      <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
-        <span className="text-xs font-medium text-slate-500">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border bg-card">
+      <div className="flex items-center justify-between border-b px-4 py-2.5">
+        <span className="text-xs font-medium text-muted-foreground">
           Editor
         </span>
         <div className="flex items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
@@ -90,7 +90,7 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
             variant="ghost"
             size="sm"
             onClick={() => document.getElementById(fileInputId)?.click()}
-            className="h-7 px-2 text-xs text-slate-400 transition-colors hover:text-cyan-300"
+            className="h-7 px-2 text-xs transition-colors hover:text-cyan-500"
           >
             Upload
           </Button>
@@ -98,13 +98,13 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
       </div>
 
       <div
-        className="relative flex-1"
+        className="relative flex-1 overflow-hidden"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
       >
         {isDragging && (
-          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-xl border-2 border-dashed border-cyan-400/60 bg-cyan-500/10 text-sm font-medium text-cyan-200 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-xl border-2 border-dashed border-cyan-400/60 bg-cyan-500/10 text-sm font-medium text-cyan-600 dark:text-cyan-200 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 animate-pulse rounded-full bg-cyan-400" />
               Drop your markdown file to import
@@ -115,7 +115,7 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
 
         {!value && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-8">
-            <p className="text-xs text-slate-600">Start typing...</p>
+            <p className="text-xs text-muted-foreground">Start typing...</p>
           </div>
         )}
 
@@ -125,7 +125,7 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
           onChange={handleChange}
           placeholder={placeholder}
           disabled={disabled}
-          className="h-full min-h-[400px] w-full resize-none border-0 bg-transparent px-6 py-5 font-mono text-sm leading-relaxed text-slate-100 placeholder:text-slate-600 focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="h-full w-full resize-none border-0 bg-transparent px-6 py-5 font-mono text-sm leading-relaxed focus-visible:ring-0 focus-visible:ring-offset-0 overflow-y-auto"
         />
       </div>
     </div>

@@ -118,9 +118,9 @@ export function PDFViewer({ markdown, html, options = {}, shouldGenerate = true 
   }
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-[#0b1020]/60 backdrop-blur">
-      <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
-        <span className="text-xs font-medium text-slate-500">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border bg-card">
+      <div className="flex items-center justify-between border-b px-4 py-2.5">
+        <span className="text-xs font-medium text-muted-foreground">
           PDF
         </span>
         <div className="opacity-0 transition-opacity group-hover:opacity-100">
@@ -129,43 +129,43 @@ export function PDFViewer({ markdown, html, options = {}, shouldGenerate = true 
             disabled={!pdfResult || loading}
             variant="ghost"
             size="sm"
-            className="h-7 px-2 text-xs text-slate-400 transition-colors hover:text-cyan-300 disabled:opacity-30"
+            className="h-7 px-2 text-xs transition-colors hover:text-cyan-500 disabled:opacity-30"
           >
             Download
           </Button>
         </div>
       </div>
       
-      <div className="relative flex-1 overflow-hidden bg-white/[0.02]">
+      <div className="relative flex-1 overflow-hidden bg-muted/20">
         {error && (
           <div className="absolute inset-0 flex items-center justify-center p-8 text-center">
-            <div className="space-y-3 text-slate-400">
-              <div className="mx-auto h-12 w-12 rounded-full bg-red-500/10 flex items-center justify-center">
-                <div className="h-6 w-6 rounded-full border-2 border-red-400/50 flex items-center justify-center text-red-400 text-xs font-bold">!</div>
+            <div className="space-y-3">
+              <div className="mx-auto h-12 w-12 rounded-full bg-destructive/10 flex items-center justify-center">
+                <div className="h-6 w-6 rounded-full border-2 border-destructive/50 flex items-center justify-center text-destructive text-xs font-bold">!</div>
               </div>
               <div>
-                <p className="text-sm font-medium text-red-300">{error}</p>
-                <p className="text-xs mt-2 text-slate-500">Please check your markdown syntax</p>
+                <p className="text-sm font-medium text-destructive">{error}</p>
+                <p className="text-xs mt-2 text-muted-foreground">Please check your markdown syntax</p>
               </div>
             </div>
           </div>
         )}
-        
+
         {loading && !pdfResult && !error && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="flex flex-col items-center gap-3">
               <div className="relative">
                 <div className="h-12 w-12 rounded-full border-2 border-cyan-500/20" />
-                <div className="absolute inset-0 h-12 w-12 animate-spin rounded-full border-2 border-transparent border-t-cyan-400" />
+                <div className="absolute inset-0 h-12 w-12 animate-spin rounded-full border-2 border-transparent border-t-cyan-500" />
               </div>
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-500">Building PDF</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Building PDF</span>
             </div>
           </div>
         )}
-        
+
         {!loading && !pdfResult && !error && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <p className="text-xs text-slate-600">PDF</p>
+            <p className="text-xs text-muted-foreground">PDF</p>
           </div>
         )}
         
