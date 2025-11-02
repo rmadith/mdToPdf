@@ -1,6 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -17,6 +19,9 @@ interface ToolbarProps {
   onPageSizeChange: (size: "A4" | "Letter" | "Legal") => void
   onClear: () => void
   onLoadTemplate: (template: string) => void
+  autoConvert: boolean
+  onAutoConvertChange: (value: boolean) => void
+  onConvert: () => void
 }
 
 const TEMPLATES = {
@@ -145,14 +150,17 @@ export function Toolbar({
   onPageSizeChange,
   onClear,
   onLoadTemplate,
+  autoConvert,
+  onAutoConvertChange,
+  onConvert,
 }: ToolbarProps) {
   return (
     <div className="flex items-center gap-4 text-xs">
       <Select value={stylePreset} onValueChange={onStylePresetChange}>
-        <SelectTrigger className="h-8 w-[110px] border-white/10 bg-transparent text-xs text-slate-300">
+        <SelectTrigger className="h-8 w-[110px] border-border bg-transparent text-xs">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
+        <SelectContent>
           <SelectItem value="modern">Modern</SelectItem>
           <SelectItem value="github">GitHub</SelectItem>
           <SelectItem value="academic">Academic</SelectItem>
@@ -161,10 +169,10 @@ export function Toolbar({
       </Select>
 
       <Select value={pageSize} onValueChange={onPageSizeChange}>
-        <SelectTrigger className="h-8 w-[80px] border-white/10 bg-transparent text-xs text-slate-300">
+        <SelectTrigger className="h-8 w-[80px] border-border bg-transparent text-xs">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
+        <SelectContent>
           <SelectItem value="A4">A4</SelectItem>
           <SelectItem value="Letter">Letter</SelectItem>
           <SelectItem value="Legal">Legal</SelectItem>
@@ -172,21 +180,47 @@ export function Toolbar({
       </Select>
 
       <Select onValueChange={onLoadTemplate}>
-        <SelectTrigger className="h-8 w-[110px] border-white/10 bg-transparent text-xs text-slate-300">
+        <SelectTrigger className="h-8 w-[110px] border-border bg-transparent text-xs">
           <SelectValue placeholder="Template" />
         </SelectTrigger>
-        <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
+        <SelectContent>
           <SelectItem value="basic">Basic</SelectItem>
           <SelectItem value="resume">Resume</SelectItem>
           <SelectItem value="technical">Technical</SelectItem>
         </SelectContent>
       </Select>
 
+      <div className="h-4 w-px bg-border" />
+
+      <div className="flex items-center gap-2">
+        <Switch
+          id="auto-convert"
+          checked={autoConvert}
+          onCheckedChange={onAutoConvertChange}
+          className="data-[state=checked]:bg-cyan-500"
+        />
+        <Label htmlFor="auto-convert" className="text-xs text-muted-foreground cursor-pointer">
+          Auto
+        </Label>
+      </div>
+
+      {!autoConvert && (
+        <Button
+          onClick={onConvert}
+          size="sm"
+          className="h-8 px-3 text-xs bg-cyan-500 text-white hover:bg-cyan-600"
+        >
+          Convert
+        </Button>
+      )}
+
+      <div className="h-4 w-px bg-border" />
+
       <Button
         variant="ghost"
         size="sm"
         onClick={onClear}
-        className="h-8 px-3 text-xs text-slate-400 transition-colors hover:text-red-300"
+        className="h-8 px-3 text-xs text-muted-foreground hover:text-red-500"
       >
         Clear
       </Button>

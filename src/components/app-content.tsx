@@ -89,6 +89,8 @@ export default function AppContent() {
   const [pageSize, setPageSize] = useState<"A4" | "Letter" | "Legal">("A4")
   const [activeTab, setActiveTab] = useState<string>("editor")
   const [mounted, setMounted] = useState(false)
+  const [autoConvert, setAutoConvert] = useState(true)
+  const [manualTrigger, setManualTrigger] = useState(0)
 
   // Load saved markdown from storage after hydration
   useEffect(() => {
@@ -182,119 +184,107 @@ export default function AppContent() {
     [pageSize, stylePreset]
   )
 
-  // Determine if PDF should be generated (only when visible)
+  const handleConvert = useCallback(() => {
+    setManualTrigger(prev => prev + 1)
+  }, [])
+
+  // Determine if PDF should be generated
   const shouldGeneratePDF = useMemo(() => {
     if (typeof window === 'undefined') return false
+    if (!autoConvert) return manualTrigger > 0
     return activeTab === "pdf" || window.innerWidth >= 1024
-  }, [activeTab])
+  }, [activeTab, autoConvert, manualTrigger])
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#05060f] text-slate-100">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.18),transparent_55%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,12,26,0.9),rgba(5,6,18,1))]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:64px_64px] opacity-5" />
+    <div className="flex h-screen flex-col overflow-hidden bg-background">
+      <header className="border-b">
+        <div className="mx-auto flex w-full items-center justify-between px-6 py-3">
+          <h1 className="font-mono text-sm font-medium">
+            markdown → pdf
+          </h1>
+          <div className="flex items-center gap-6">
+            <Toolbar
+              stylePreset={stylePreset}
+              onStylePresetChange={(preset) => setStylePreset(preset)}
+              pageSize={pageSize}
+              onPageSizeChange={(size) => setPageSize(size)}
+              onClear={handleClear}
+              onLoadTemplate={handleLoadTemplate}
+              autoConvert={autoConvert}
+              onAutoConvertChange={setAutoConvert}
+              onConvert={handleConvert}
+            />
+            <div className="h-4 w-px bg-border" />
+            <ThemeToggle />
+          </div>
+        </div>
+      </header>
 
-      <div className="relative z-10 flex min-h-screen flex-col">
-        <header className="border-b border-white/10">
-          <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
-            <h1 className="font-mono text-sm font-medium tracking-tight text-slate-100">
-              markdown → pdf
-            </h1>
-            <div className="flex items-center gap-6">
-              <Toolbar
-                stylePreset={stylePreset}
-                onStylePresetChange={(preset) => setStylePreset(preset)}
-                pageSize={pageSize}
-                onPageSizeChange={(size) => setPageSize(size)}
-                onClear={handleClear}
-                onLoadTemplate={handleLoadTemplate}
-              />
-              <div className="h-4 w-px bg-white/10" />
-              <ThemeToggle />
+      <main className="flex-1 overflow-hidden">
+        <div className="mx-auto h-full w-full px-6 py-4">
+          <div className="relative h-full overflow-hidden rounded-xl border">
+            <div className="relative hidden h-full gap-4 p-4 lg:grid lg:grid-cols-2">
+              <Suspense fallback={<LoadingSkeleton />}>
+                {mounted && <MarkdownEditor value={markdown} onChange={setMarkdown} />}
+              </Suspense>
+              <Suspense fallback={<LoadingSkeleton />}>
+                {mounted && (
+                  <PDFViewer
+                    markdown={markdown}
+                    html={parsedHtml}
+                    options={pdfOptions}
+                    shouldGenerate={shouldGeneratePDF}
+                  />
+                )}
+              </Suspense>
+            </div>
+
+            <div className="relative h-full p-4 lg:hidden">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="flex h-full flex-col">
+                <TabsList className="grid w-full grid-cols-2 border-b bg-transparent p-0">
+                  <TabsTrigger
+                    value="editor"
+                    className="rounded-none border-b-2 border-transparent px-4 py-3 text-xs font-medium data-[state=active]:border-cyan-500"
+                  >
+                    Editor
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="pdf"
+                    className="rounded-none border-b-2 border-transparent px-4 py-3 text-xs font-medium data-[state=active]:border-cyan-500"
+                  >
+                    PDF
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="editor" className="mt-4 flex-1">
+                  <Suspense fallback={<LoadingSkeleton />}>
+                    {mounted && <MarkdownEditor value={markdown} onChange={setMarkdown} />}
+                  </Suspense>
+                </TabsContent>
+                <TabsContent value="pdf" className="mt-4 flex-1">
+                  <Suspense fallback={<LoadingSkeleton />}>
+                    {mounted && activeTab === "pdf" && (
+                      <PDFViewer
+                        markdown={markdown}
+                        html={parsedHtml}
+                        options={pdfOptions}
+                        shouldGenerate
+                      />
+                    )}
+                  </Suspense>
+                </TabsContent>
+              </Tabs>
             </div>
           </div>
-        </header>
+        </div>
+      </main>
 
-        <main className="flex-1 py-8">
-          <div className="mx-auto w-full max-w-7xl px-6">
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
-              <div className="relative hidden h-[calc(100vh-140px)] gap-4 p-4 lg:grid lg:grid-cols-3">
-                <Suspense fallback={<LoadingSkeleton />}>
-                  {mounted && <MarkdownEditor value={markdown} onChange={setMarkdown} />}
-                </Suspense>
-                <Suspense fallback={<LoadingSkeleton />}>
-                  {mounted && <MarkdownPreview html={parsedHtml} loading={parsing} />}
-                </Suspense>
-                <Suspense fallback={<LoadingSkeleton />}>
-                  {mounted && (
-                    <PDFViewer
-                      markdown={markdown}
-                      html={parsedHtml}
-                      options={pdfOptions}
-                      shouldGenerate={shouldGeneratePDF}
-                    />
-                  )}
-                </Suspense>
-              </div>
-
-              <div className="relative p-4 lg:hidden">
-                <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col">
-                  <TabsList className="grid w-full grid-cols-3 border-b border-white/10 bg-transparent p-0">
-                    <TabsTrigger
-                      value="editor"
-                      className="rounded-none border-b-2 border-transparent px-4 py-3 text-xs font-medium text-slate-400 data-[state=active]:border-cyan-400 data-[state=active]:text-slate-100"
-                    >
-                      Editor
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="preview"
-                      className="rounded-none border-b-2 border-transparent px-4 py-3 text-xs font-medium text-slate-400 data-[state=active]:border-cyan-400 data-[state=active]:text-slate-100"
-                    >
-                      Preview
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="pdf"
-                      className="rounded-none border-b-2 border-transparent px-4 py-3 text-xs font-medium text-slate-400 data-[state=active]:border-cyan-400 data-[state=active]:text-slate-100"
-                    >
-                      PDF
-                    </TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="editor" className="mt-4 min-h-[500px]">
-                    <Suspense fallback={<LoadingSkeleton />}>
-                      {mounted && <MarkdownEditor value={markdown} onChange={setMarkdown} />}
-                    </Suspense>
-                  </TabsContent>
-                  <TabsContent value="preview" className="mt-4 min-h-[500px]">
-                    <Suspense fallback={<LoadingSkeleton />}>
-                      {mounted && <MarkdownPreview html={parsedHtml} loading={parsing} />}
-                    </Suspense>
-                  </TabsContent>
-                  <TabsContent value="pdf" className="mt-4 min-h-[500px]">
-                    <Suspense fallback={<LoadingSkeleton />}>
-                      {mounted && activeTab === "pdf" && (
-                        <PDFViewer
-                          markdown={markdown}
-                          html={parsedHtml}
-                          options={pdfOptions}
-                          shouldGenerate
-                        />
-                      )}
-                    </Suspense>
-                  </TabsContent>
-                </Tabs>
-              </div>
-            </div>
-          </div>
-        </main>
-
-        <footer className="border-t border-white/10">
-          <div className="mx-auto flex w-full max-w-7xl items-center justify-center px-6 py-3">
-            <span className="text-xs text-slate-500">
-              Next.js · Tailwind · @react-pdf
-            </span>
-          </div>
-        </footer>
-      </div>
+      <footer className="border-t">
+        <div className="mx-auto flex w-full items-center justify-center px-6 py-2">
+          <span className="text-xs text-muted-foreground">
+            Next.js · Tailwind · @react-pdf
+          </span>
+        </div>
+      </footer>
     </div>
   )
 }
