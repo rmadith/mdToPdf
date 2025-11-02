@@ -167,9 +167,6 @@ export default function AppContent() {
     if (confirm("Are you sure you want to clear all content?")) {
       setMarkdown("")
       clearMarkdown()
-      toast.success("Content cleared", {
-        description: "Your workspace has been cleared",
-      })
     }
   }, [])
 
@@ -177,9 +174,6 @@ export default function AppContent() {
     const template = TEMPLATES[templateKey as keyof typeof TEMPLATES]
     if (template) {
       setMarkdown(template)
-      toast.success("Template loaded", {
-        description: `${templateKey.charAt(0).toUpperCase() + templateKey.slice(1)} template loaded successfully`,
-      })
     }
   }, [])
 
@@ -200,90 +194,21 @@ export default function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* Header with gradient */}
-      <motion.header 
-        className="relative border-b overflow-hidden"
-        initial="hidden"
-        animate="visible"
-        variants={fadeInDown}
-      >
-        {/* Animated gradient background */}
-        <div className="absolute inset-0 gradient-primary animate-gradient opacity-10 dark:opacity-20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-background/50 to-transparent" />
-        
-        <div className="relative container mx-auto px-4 py-6">
+      {/* Minimal header */}
+      <header className="border-b">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <motion.div 
-              className="flex items-center gap-3"
-              variants={staggerContainer}
-              initial="hidden"
-              animate="visible"
-            >
-              <motion.div 
-                variants={staggerItem}
-                className="relative"
-              >
-                <motion.div
-                  animate={{ 
-                    rotate: [0, 5, -5, 0],
-                    scale: [1, 1.05, 1.05, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatDelay: 3,
-                  }}
-                >
-                  <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 shadow-soft">
-                    <FileText className="w-8 h-8 text-primary" />
-                  </div>
-                </motion.div>
-                <motion.div
-                  className="absolute -top-1 -right-1"
-                  animate={{ 
-                    scale: [1, 1.2, 1],
-                    opacity: [0.5, 1, 0.5],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                >
-                  <Sparkles className="w-4 h-4 text-primary" />
-                </motion.div>
-              </motion.div>
-              
-              <div>
-                <motion.h1 
-                  variants={staggerItem}
-                  className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent"
-                >
-                  Markdown to PDF Converter
-                </motion.h1>
-                <motion.p 
-                  variants={staggerItem}
-                  className="text-sm md:text-base text-muted-foreground mt-1"
-                >
-                  Create beautiful PDFs with{" "}
-                  <span className="font-semibold text-primary">extended features</span> support
-                </motion.p>
-              </div>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              <ThemeToggle />
-            </motion.div>
+            <h1 className="text-xl font-semibold">
+              Markdown to PDF
+            </h1>
+            <ThemeToggle />
           </div>
         </div>
-      </motion.header>
+      </header>
 
       {/* Toolbar */}
-      <div className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4">
+      <div className="border-b">
+        <div className="container mx-auto px-6 py-3">
           <Toolbar
             stylePreset={stylePreset}
             onStylePresetChange={(preset) => setStylePreset(preset)}
@@ -296,9 +221,9 @@ export default function AppContent() {
       </div>
 
       {/* Main Content - Desktop: 3 panels, Mobile: Tabs */}
-      <main className="flex-1 container mx-auto px-4 py-6">
+      <main className="flex-1 container mx-auto px-6 py-8">
         {/* Desktop Layout: 3 equal panels */}
-        <div className="hidden lg:grid lg:grid-cols-3 gap-4 h-[calc(100vh-250px)]">
+        <div className="hidden lg:grid lg:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
           <div className="overflow-hidden">
             <Suspense fallback={<LoadingSkeleton />}>
               {mounted && <MarkdownEditor value={markdown} onChange={setMarkdown} />}
@@ -356,23 +281,6 @@ export default function AppContent() {
           </Tabs>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t bg-card py-4">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>
-            Built with Next.js, React PDF, and shadcn/ui | Open Source |{" "}
-            <a
-              href="https://github.com"
-              className="underline hover:text-foreground"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GitHub
-            </a>
-          </p>
-        </div>
-      </footer>
     </div>
   )
 }

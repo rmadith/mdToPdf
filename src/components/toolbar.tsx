@@ -158,132 +158,65 @@ export function Toolbar({
   onLoadTemplate,
 }: ToolbarProps) {
   return (
-    <TooltipProvider>
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={staggerContainer}
+    <div className="flex flex-wrap gap-4 items-center text-sm">
+      <div className="flex items-center gap-2">
+        <Label htmlFor="style-preset" className="text-muted-foreground">
+          Style
+        </Label>
+        <Select value={stylePreset} onValueChange={onStylePresetChange}>
+          <SelectTrigger id="style-preset" className="w-[140px] h-9">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="modern">Modern</SelectItem>
+            <SelectItem value="github">GitHub</SelectItem>
+            <SelectItem value="academic">Academic</SelectItem>
+            <SelectItem value="minimal">Minimal</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <Label htmlFor="page-size" className="text-muted-foreground">
+          Size
+        </Label>
+        <Select value={pageSize} onValueChange={onPageSizeChange}>
+          <SelectTrigger id="page-size" className="w-[100px] h-9">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="A4">A4</SelectItem>
+            <SelectItem value="Letter">Letter</SelectItem>
+            <SelectItem value="Legal">Legal</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <Label htmlFor="template" className="text-muted-foreground">
+          Template
+        </Label>
+        <Select onValueChange={onLoadTemplate}>
+          <SelectTrigger id="template" className="w-[140px] h-9">
+            <SelectValue placeholder="None" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="basic">Basic</SelectItem>
+            <SelectItem value="resume">Resume</SelectItem>
+            <SelectItem value="technical">Technical</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <Button 
+        variant="ghost" 
+        size="sm"
+        onClick={onClear}
+        className="h-9 text-muted-foreground hover:text-foreground"
       >
-        <Card className="p-4 shadow-soft hover-lift">
-          <div className="flex flex-wrap gap-4 items-end">
-            <motion.div 
-              variants={staggerItem}
-              className="flex-1 min-w-[200px]"
-            >
-              <Label htmlFor="style-preset" className="mb-2 block flex items-center gap-2 text-sm font-medium">
-                <Palette className="w-4 h-4 text-primary" />
-                Style Preset
-              </Label>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div>
-                    <Select value={stylePreset} onValueChange={onStylePresetChange}>
-                      <SelectTrigger id="style-preset" className="transition-fast hover:border-primary/50">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="modern">Modern</SelectItem>
-                        <SelectItem value="github">GitHub</SelectItem>
-                        <SelectItem value="academic">Academic</SelectItem>
-                        <SelectItem value="minimal">Minimal</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Choose the visual style for your PDF</p>
-                </TooltipContent>
-              </Tooltip>
-            </motion.div>
-
-            <motion.div 
-              variants={staggerItem}
-              className="flex-1 min-w-[150px]"
-            >
-              <Label htmlFor="page-size" className="mb-2 block flex items-center gap-2 text-sm font-medium">
-                <FileType className="w-4 h-4 text-primary" />
-                Page Size
-              </Label>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div>
-                    <Select value={pageSize} onValueChange={onPageSizeChange}>
-                      <SelectTrigger id="page-size" className="transition-fast hover:border-primary/50">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="A4">A4 (210 × 297mm)</SelectItem>
-                        <SelectItem value="Letter">Letter (8.5 × 11")</SelectItem>
-                        <SelectItem value="Legal">Legal (8.5 × 14")</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Select the page size for your PDF</p>
-                </TooltipContent>
-              </Tooltip>
-            </motion.div>
-
-            <motion.div 
-              variants={staggerItem}
-              className="flex-1 min-w-[200px]"
-            >
-              <Label htmlFor="template" className="mb-2 block flex items-center gap-2 text-sm font-medium">
-                <FileText className="w-4 h-4 text-primary" />
-                Load Template
-              </Label>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div>
-                    <Select onValueChange={onLoadTemplate}>
-                      <SelectTrigger id="template" className="transition-fast hover:border-primary/50">
-                        <SelectValue placeholder="Select template..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="basic">📝 Basic Example</SelectItem>
-                        <SelectItem value="resume">💼 Resume</SelectItem>
-                        <SelectItem value="technical">⚙️ Technical Doc</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Start with a pre-made template</p>
-                </TooltipContent>
-              </Tooltip>
-            </motion.div>
-
-            <motion.div
-              variants={staggerItem}
-            >
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <motion.div
-                    initial="rest"
-                    whileHover="hover"
-                    whileTap="tap"
-                    variants={buttonHoverSubtle}
-                  >
-                    <Button 
-                      variant="outline" 
-                      onClick={onClear}
-                      className="gap-2 transition-fast hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      Clear
-                    </Button>
-                  </motion.div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Clear all content from the editor</p>
-                </TooltipContent>
-              </Tooltip>
-            </motion.div>
-          </div>
-        </Card>
-      </motion.div>
-    </TooltipProvider>
+        Clear
+      </Button>
+    </div>
   )
 }
 
