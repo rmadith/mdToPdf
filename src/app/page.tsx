@@ -5,6 +5,7 @@ import { MarkdownEditor } from "@/components/markdown-editor"
 import { MarkdownPreview } from "@/components/markdown-preview"
 import { PDFViewer } from "@/components/pdf-viewer"
 import { Toolbar, TEMPLATES } from "@/components/toolbar"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { StylePreset } from "@/lib/markdown/types"
 
@@ -148,10 +149,15 @@ export default function Home() {
       {/* Header */}
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold">Markdown to PDF Converter</h1>
-          <p className="text-sm text-muted-foreground">
-            Create beautiful PDFs from Markdown with extended features support
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold">Markdown to PDF Converter</h1>
+              <p className="text-sm text-muted-foreground">
+                Create beautiful PDFs from Markdown with extended features support
+              </p>
+            </div>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
