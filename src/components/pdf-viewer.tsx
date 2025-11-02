@@ -144,7 +144,7 @@ export function PDFViewer({ markdown, html, options = {}, shouldGenerate = true 
         {pdfResult && !error && (
           <>
             <iframe
-              src={pdfResult.url}
+              src={`${pdfResult.url}#toolbar=0&navpanes=0&scrollbar=0`}
               className="w-full h-full"
               title="PDF Preview"
             />
