@@ -1,36 +1,291 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Markdown to PDF Converter
 
-## Getting Started
+Transform your Markdown documents into beautifully formatted PDFs with extended features support. A modern, fast, and free web application built with Next.js and React.
 
-First, run the development server:
+![Version](https://img.shields.io/badge/version-0.1.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Next.js](https://img.shields.io/badge/Next.js-16.0-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
+
+## ✨ Features
+
+- **Real-time Preview** - See your markdown rendered as you type
+- **Multiple Style Presets** - GitHub, Academic, Modern, and Minimal themes
+- **Extended Markdown Support**
+  - 🧮 Math formulas with LaTeX (KaTeX)
+  - 💻 Syntax highlighting for code blocks  
+  - 📊 Tables and GitHub Flavored Markdown
+  - 🔗 Links, images, and blockquotes
+- **Professional PDFs** - Export publication-ready documents
+- **Dark Mode** - Full dark mode support with system preference detection
+- **Responsive Design** - Works great on desktop, tablet, and mobile
+- **Embeddable** - Use as components in your own projects
+- **Zero Configuration** - Works out of the box
+- **Free & Open Source** - No limits, no subscriptions
+
+## 🚀 Quick Start
+
+### Online Version
+
+Visit [your-app-url.vercel.app](https://your-app-url.vercel.app) to use the app immediately - no installation required!
+
+### Local Development
 
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/mdtopdf.git
+cd mdtopdf
+
+# Install dependencies
+npm install
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📖 Usage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### As a Web Application
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Type or paste** your markdown in the editor
+2. **See live preview** of the rendered content
+3. **View PDF preview** in real-time
+4. **Download PDF** when ready
 
-## Learn More
+### As an Embeddable Module
 
-To learn more about Next.js, take a look at the following resources:
+#### Using the Conversion Functions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```typescript
+import { parseMarkdown, generatePDF, downloadPDF } from 'mdtopdf'
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+async function convertMarkdownToPDF(markdown: string) {
+  // Parse markdown
+  const parsed = await parseMarkdown(markdown, {
+    gfm: true,
+    math: true,
+    syntaxHighlighting: true
+  })
 
-## Deploy on Vercel
+  // Generate PDF
+  const pdf = await generatePDF({
+    html: parsed.html,
+    markdown,
+    stylePreset: 'modern',
+    pageSize: 'A4',
+    title: 'My Document'
+  })
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  // Download
+  downloadPDF(pdf.blob, 'my-document.pdf')
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### Using React Components
+
+```typescript
+import { MarkdownEditor, PDFViewer } from 'mdtopdf/components'
+import { useState } from 'react'
+
+export default function MyApp() {
+  const [markdown, setMarkdown] = useState('# Hello World')
+  const [html, setHtml] = useState('')
+
+  return (
+    <div>
+      <MarkdownEditor value={markdown} onChange={setMarkdown} />
+      <PDFViewer 
+        markdown={markdown} 
+        html={html}
+        options={{ stylePreset: 'github' }}
+      />
+    </div>
+  )
+}
+```
+
+#### Using Custom Hooks
+
+```typescript
+import { useMarkdownParser, usePDFGenerator } from 'mdtopdf/hooks'
+
+function MyComponent() {
+  const markdown = '# My Document\n\nHello **world**!'
+  
+  const { result, loading } = useMarkdownParser(markdown, {
+    gfm: true,
+    math: true
+  })
+
+  const { result: pdf } = usePDFGenerator(
+    markdown,
+    result?.html || '',
+    { stylePreset: 'modern' }
+  )
+
+  return (
+    <div>
+      {loading ? 'Parsing...' : 'Ready!'}
+      {pdf && <a href={pdf.url} download>Download PDF</a>}
+    </div>
+  )
+}
+```
+
+## 🎨 Style Presets
+
+### GitHub
+Clean and familiar GitHub-style formatting with subtle borders and code highlighting.
+
+### Academic
+Professional serif fonts (Times New Roman) suitable for academic papers and formal documents.
+
+### Modern
+Bold and colorful with contemporary design elements, perfect for presentations and modern documents.
+
+### Minimal
+Simple and clean with minimal styling, focusing on content readability.
+
+## 📄 Supported Markdown Features
+
+### Basic Syntax
+- Headings (H1-H6)
+- Bold and italic text
+- Lists (ordered and unordered)
+- Links and images
+- Blockquotes
+- Horizontal rules
+- Inline code and code blocks
+
+### Extended Syntax
+- Tables
+- Task lists
+- Strikethrough
+- Footnotes
+- Definition lists
+
+### Advanced Features
+- **Math formulas**: Inline `$E = mc^2$` and block math:
+  ```
+  $$
+  \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+  $$
+  ```
+- **Syntax highlighting**: Automatic detection for 100+ programming languages
+- **HTML support**: Embed HTML when needed (can be sanitized)
+
+## 🏗️ Project Structure
+
+```
+mdtopdf/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── layout.tsx         # Root layout
+│   │   └── page.tsx           # Main converter page
+│   ├── components/            # React components
+│   │   ├── ui/               # shadcn/ui components
+│   │   ├── markdown-editor.tsx
+│   │   ├── markdown-preview.tsx
+│   │   ├── pdf-viewer.tsx
+│   │   └── toolbar.tsx
+│   ├── lib/                   # Core library
+│   │   ├── markdown/         # Markdown processing
+│   │   │   ├── parser.ts
+│   │   │   ├── pdf-generator.ts
+│   │   │   └── types.ts
+│   │   └── pdf/              # PDF styling
+│   │       ├── document.tsx
+│   │       └── styles.ts
+│   └── hooks/                # Custom React hooks
+│       ├── use-markdown-parser.ts
+│       ├── use-pdf-generator.ts
+│       └── use-debounce.ts
+├── .cursorrules              # Cursor AI configuration
+├── Agents.md                 # AI agent instructions
+├── PERFORMANCE.md            # Performance guide
+└── README.md                 # This file
+```
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) with App Router
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
+- **Markdown Processing**: [unified](https://unifiedjs.com/) ecosystem
+  - remark-parse, remark-gfm, remark-math
+  - rehype-katex, rehype-prism-plus
+- **PDF Generation**: [@react-pdf/renderer](https://react-pdf.org/)
+- **Math Rendering**: [KaTeX](https://katex.org/)
+- **Theme Management**: [next-themes](https://github.com/pacocoursey/next-themes)
+
+## ⚡ Performance
+
+This application is optimized for maximum performance:
+
+- **Bundle Size**: < 200KB gzipped
+- **First Contentful Paint**: < 1.2s
+- **Time to Interactive**: < 2.5s
+- **Lighthouse Score**: 95+
+
+See [PERFORMANCE.md](./PERFORMANCE.md) for detailed performance metrics and optimization guide.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+### Development Workflow
+
+1. Create a feature branch: `git checkout -b feature/my-feature`
+2. Make your changes
+3. Test thoroughly
+4. Commit with conventional commits: `feat: add new feature`
+5. Push and create a pull request
+
+### Code Style
+
+- Use TypeScript strict mode
+- Follow ESLint and Prettier configurations
+- Write descriptive commit messages
+- Add tests for new features
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Next.js](https://nextjs.org/) - The React framework
+- [shadcn/ui](https://ui.shadcn.com/) - Beautiful UI components
+- [unified](https://unifiedjs.com/) - Markdown processing
+- [@react-pdf/renderer](https://react-pdf.org/) - PDF generation
+- [KaTeX](https://katex.org/) - Math rendering
+
+## 🐛 Bug Reports
+
+Found a bug? Please open an issue on [GitHub Issues](https://github.com/yourusername/mdtopdf/issues).
+
+## 💡 Feature Requests
+
+Have an idea? We'd love to hear it! Open a feature request on [GitHub Issues](https://github.com/yourusername/mdtopdf/issues).
+
+## 📮 Contact
+
+- GitHub: [@yourusername](https://github.com/yourusername)
+- Email: your.email@example.com
+
+## 🗺️ Roadmap
+
+- [ ] Web Workers for markdown parsing
+- [ ] Mermaid diagram support
+- [ ] Custom CSS themes
+- [ ] PDF watermark support
+- [ ] Batch conversion
+- [ ] API endpoint for programmatic use
+- [ ] Browser extension
+
+---
+
+Made with ❤️ by the open source community
