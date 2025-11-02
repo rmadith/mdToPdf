@@ -118,23 +118,25 @@ export function PDFViewer({ markdown, html, options = {}, shouldGenerate = true 
   }
 
   return (
-    <div className="h-full flex flex-col border rounded-lg bg-card">
-      <div className="px-4 py-3 border-b flex items-center justify-between bg-muted/30">
-        <span className="text-xs font-medium text-muted-foreground">PDF</span>
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020]/80 shadow-[0_10px_60px_-35px_rgba(15,23,42,0.9)] backdrop-blur">
+      <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.04] px-4 py-3">
+        <span className="font-mono text-[11px] uppercase tracking-[0.35em] text-slate-400">
+          PDF
+        </span>
         <Button
           onClick={handleDownload}
           disabled={!pdfResult || loading}
           variant="ghost"
           size="sm"
-          className="h-7 px-2 text-xs"
+          className="h-7 rounded-full border border-white/10 px-3 text-[11px] uppercase tracking-[0.3em] text-slate-300 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-slate-100 disabled:opacity-30"
         >
           Download
         </Button>
       </div>
       
-      <div className="flex-1 overflow-auto relative bg-muted/5">
+      <div className="relative flex-1 overflow-hidden bg-white/[0.02]">
         {error && (
-          <div className="absolute inset-0 flex items-center justify-center text-center text-muted-foreground text-sm p-8">
+          <div className="absolute inset-0 flex items-center justify-center p-8 text-center text-sm text-slate-400">
             <div>
               <p className="text-destructive">{error}</p>
               <p className="text-xs mt-2">Please check your markdown syntax</p>
@@ -143,13 +145,13 @@ export function PDFViewer({ markdown, html, options = {}, shouldGenerate = true 
         )}
         
         {loading && !pdfResult && !error && (
-          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm">
+          <div className="absolute inset-0 flex items-center justify-center text-sm text-slate-400">
             <p>Generating PDF...</p>
           </div>
         )}
         
         {!loading && !pdfResult && !error && (
-          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm">
+          <div className="absolute inset-0 flex items-center justify-center text-sm text-slate-500">
             <p>PDF preview</p>
           </div>
         )}
@@ -157,7 +159,7 @@ export function PDFViewer({ markdown, html, options = {}, shouldGenerate = true 
         {pdfResult && !error && (
           <iframe
             src={`${pdfResult.url}#toolbar=0&navpanes=0&scrollbar=0`}
-            className="w-full h-full"
+            className="h-full w-full"
             title="PDF Preview"
           />
         )}

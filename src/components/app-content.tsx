@@ -1,18 +1,14 @@
 "use client"
 
+import Link from "next/link"
 import { useState, useEffect, useMemo, useCallback, lazy, Suspense } from "react"
-import { motion } from "framer-motion"
 import { Toolbar, TEMPLATES } from "@/components/toolbar"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import type { StylePreset } from "@/lib/markdown/types"
 import { preloadCriticalChunks } from "@/lib/dynamic-loader"
 import { loadMarkdown, saveMarkdown, clearMarkdown } from "@/lib/storage-manager"
-import { fadeInDown, staggerContainer, staggerItem } from "@/lib/animations"
-import { toast } from "sonner"
-import { FileText, Sparkles } from "lucide-react"
 
 // Lazy load heavy components
 const MarkdownEditor = lazy(() => import("@/components/markdown-editor").then(m => ({ default: m.MarkdownEditor })))
@@ -69,19 +65,19 @@ $$
 **Ready to create your document?** Start editing above! 📝
 `
 
-// Loading skeleton component
 function LoadingSkeleton() {
   return (
-    <Card className="h-full flex flex-col animate-pulse">
-      <div className="p-4 border-b">
-        <div className="h-5 bg-muted rounded w-24"></div>
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+      <div className="border-b border-white/10 bg-white/[0.05] px-4 py-3">
+        <div className="h-3 w-16 rounded-full bg-white/10" />
       </div>
-      <div className="flex-1 p-6 space-y-4">
-        <div className="h-4 bg-muted rounded w-3/4"></div>
-        <div className="h-4 bg-muted rounded w-full"></div>
-        <div className="h-4 bg-muted rounded w-5/6"></div>
+      <div className="flex-1 space-y-4 px-6 py-6">
+        <div className="h-3 w-3/4 rounded-full bg-white/10" />
+        <div className="h-3 w-full rounded-full bg-white/10" />
+        <div className="h-3 w-5/6 rounded-full bg-white/10" />
+        <div className="h-3 w-2/3 rounded-full bg-white/10" />
       </div>
-    </Card>
+    </div>
   )
 }
 
@@ -193,94 +189,186 @@ export default function AppContent() {
   }, [activeTab])
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      {/* Minimal header */}
-      <header className="border-b">
-        <div className="container mx-auto px-6 py-5">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold tracking-tight">
-              markdown → pdf
-            </h1>
-            <ThemeToggle />
+    <div className="relative min-h-screen overflow-hidden bg-[#05060f] text-slate-100">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.18),transparent_55%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,12,26,0.9),rgba(5,6,18,1))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:64px_64px] opacity-5" />
+
+      <div className="relative z-10 flex min-h-screen flex-col">
+        <header className="border-b border-white/10">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-12 lg:flex-row lg:items-start lg:justify-between">
+            <div className="space-y-7">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1 text-[11px] uppercase tracking-[0.35em] text-slate-400">
+                <span>Sandboxed</span>
+                <span className="text-cyan-300">workspace</span>
+              </div>
+
+              <div className="space-y-4">
+                <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+                  Markdown to PDF, without the noise.
+                </h1>
+                <p className="max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
+                  Compose in Markdown, review rich semantic HTML, and ship pixel-perfect PDFs from a focused, developer-grade environment inspired by the Cloudflare Sandbox aesthetic.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <Button
+                  type="button"
+                  onClick={() => handleLoadTemplate("technical")}
+                  className="rounded-full border border-cyan-400/40 bg-cyan-500/10 px-6 py-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-cyan-200 shadow-[0_10px_40px_-30px_rgba(56,189,248,0.6)] transition hover:border-cyan-300/60 hover:bg-cyan-500/20"
+                >
+                  Load technical template
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => handleLoadTemplate("resume")}
+                  variant="ghost"
+                  className="rounded-full border border-white/10 bg-white/[0.05] px-5 py-2 text-[11px] uppercase tracking-[0.3em] text-slate-300 transition hover:border-white/30 hover:bg-white/10 hover:text-slate-100"
+                >
+                  Load resume template
+                </Button>
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-2 text-[11px] uppercase tracking-[0.3em] text-slate-300 transition hover:border-white/30 hover:bg-white/10 hover:text-slate-100"
+                >
+                  <Link href="https://developers.cloudflare.com/sandbox/" target="_blank" rel="noreferrer">
+                    Read sandbox docs ↗
+                  </Link>
+                </Button>
+              </div>
+
+              <div className="flex flex-wrap gap-3 text-[11px] font-mono uppercase tracking-[0.35em] text-slate-500">
+                <span className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1 text-cyan-200">Real-time preview</span>
+                <span className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1 text-slate-300">Math & diagrams</span>
+                <span className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1 text-slate-300">@react-pdf renderer</span>
+              </div>
+            </div>
+
+            <div className="flex w-full max-w-xs flex-col items-end gap-6">
+              <ThemeToggle />
+              <div className="w-full rounded-3xl border border-white/10 bg-white/[0.04] p-5 text-xs text-slate-300">
+                <p className="font-mono text-[11px] uppercase tracking-[0.35em] text-slate-500">
+                  Workspace status
+                </p>
+                <div className="mt-4 space-y-3">
+                  <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.3em]">
+                    <span>Autosave</span>
+                    <span className="text-cyan-300">Enabled</span>
+                  </div>
+                  <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.3em]">
+                    <span>Local cache</span>
+                    <span className="text-slate-200">Active</span>
+                  </div>
+                  <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.3em]">
+                    <span>PDF builds</span>
+                    <span className="text-slate-200">Live</span>
+                  </div>
+                </div>
+                <p className="mt-5 text-[11px] leading-relaxed text-slate-500">
+                  Drafts persist in local storage. Switch presets or templates without losing your progress.
+                </p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div className="border-b border-white/10 bg-white/[0.02]">
+          <div className="mx-auto w-full max-w-6xl px-6 py-5">
+            <Toolbar
+              stylePreset={stylePreset}
+              onStylePresetChange={(preset) => setStylePreset(preset)}
+              pageSize={pageSize}
+              onPageSizeChange={(size) => setPageSize(size)}
+              onClear={handleClear}
+              onLoadTemplate={handleLoadTemplate}
+            />
           </div>
         </div>
-      </header>
 
-      {/* Toolbar */}
-      <div className="border-b bg-muted/20">
-        <div className="container mx-auto px-6 py-4">
-          <Toolbar
-            stylePreset={stylePreset}
-            onStylePresetChange={(preset) => setStylePreset(preset)}
-            pageSize={pageSize}
-            onPageSizeChange={(size) => setPageSize(size)}
-            onClear={handleClear}
-            onLoadTemplate={handleLoadTemplate}
-          />
-        </div>
+        <main className="flex-1 py-12">
+          <div className="mx-auto w-full max-w-6xl px-6">
+            <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.02] shadow-[0_40px_120px_-80px_rgba(56,189,248,0.35)]">
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.12),transparent_55%)]" />
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:72px_72px] opacity-5" />
+
+              <div className="relative hidden min-h-[520px] gap-6 p-6 lg:grid lg:grid-cols-3 lg:p-10">
+                <Suspense fallback={<LoadingSkeleton />}>
+                  {mounted && <MarkdownEditor value={markdown} onChange={setMarkdown} />}
+                </Suspense>
+                <Suspense fallback={<LoadingSkeleton />}>
+                  {mounted && <MarkdownPreview html={parsedHtml} loading={parsing} />}
+                </Suspense>
+                <Suspense fallback={<LoadingSkeleton />}>
+                  {mounted && (
+                    <PDFViewer
+                      markdown={markdown}
+                      html={parsedHtml}
+                      options={pdfOptions}
+                      shouldGenerate={shouldGeneratePDF}
+                    />
+                  )}
+                </Suspense>
+              </div>
+
+              <div className="relative lg:hidden">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col">
+                  <TabsList className="grid w-full grid-cols-3 rounded-full border border-white/10 bg-white/[0.05] p-1">
+                    <TabsTrigger
+                      value="editor"
+                      className="rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.25em] text-slate-400 data-[state=active]:bg-cyan-500/15 data-[state=active]:text-slate-100"
+                    >
+                      Editor
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="preview"
+                      className="rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.25em] text-slate-400 data-[state=active]:bg-cyan-500/15 data-[state=active]:text-slate-100"
+                    >
+                      Preview
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="pdf"
+                      className="rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.25em] text-slate-400 data-[state=active]:bg-cyan-500/15 data-[state=active]:text-slate-100"
+                    >
+                      PDF
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="editor" className="mt-6 min-h-[420px]">
+                    <Suspense fallback={<LoadingSkeleton />}>
+                      {mounted && <MarkdownEditor value={markdown} onChange={setMarkdown} />}
+                    </Suspense>
+                  </TabsContent>
+                  <TabsContent value="preview" className="mt-6 min-h-[420px]">
+                    <Suspense fallback={<LoadingSkeleton />}>
+                      {mounted && <MarkdownPreview html={parsedHtml} loading={parsing} />}
+                    </Suspense>
+                  </TabsContent>
+                  <TabsContent value="pdf" className="mt-6 min-h-[420px]">
+                    <Suspense fallback={<LoadingSkeleton />}>
+                      {mounted && activeTab === "pdf" && (
+                        <PDFViewer
+                          markdown={markdown}
+                          html={parsedHtml}
+                          options={pdfOptions}
+                          shouldGenerate
+                        />
+                      )}
+                    </Suspense>
+                  </TabsContent>
+                </Tabs>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <footer className="border-t border-white/10 bg-white/[0.02]">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-6 py-6 text-[11px] font-mono uppercase tracking-[0.28em] text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+            <span>Built with Next.js · Tailwind · @react-pdf</span>
+            <span className="text-cyan-300">Inspired by Cloudflare Sandbox</span>
+          </div>
+        </footer>
       </div>
-
-      {/* Main Content - Desktop: 3 panels, Mobile: Tabs */}
-      <main className="flex-1 container mx-auto px-6 py-8">
-        {/* Desktop Layout: 3 equal panels */}
-        <div className="hidden lg:grid lg:grid-cols-3 gap-6 h-[calc(100vh-210px)]">
-          <div className="overflow-hidden">
-            <Suspense fallback={<LoadingSkeleton />}>
-              {mounted && <MarkdownEditor value={markdown} onChange={setMarkdown} />}
-            </Suspense>
-          </div>
-          <div className="overflow-hidden">
-            <Suspense fallback={<LoadingSkeleton />}>
-              {mounted && <MarkdownPreview html={parsedHtml} loading={parsing} />}
-            </Suspense>
-          </div>
-          <div className="overflow-hidden">
-            <Suspense fallback={<LoadingSkeleton />}>
-              {mounted && (
-                <PDFViewer
-                  markdown={markdown}
-                  html={parsedHtml}
-                  options={pdfOptions}
-                  shouldGenerate={shouldGeneratePDF}
-                />
-              )}
-            </Suspense>
-          </div>
-        </div>
-
-        {/* Mobile/Tablet Layout: Tabs */}
-        <div className="lg:hidden h-[calc(100vh-250px)]">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="editor">Editor</TabsTrigger>
-              <TabsTrigger value="preview">Preview</TabsTrigger>
-              <TabsTrigger value="pdf">PDF</TabsTrigger>
-            </TabsList>
-            <TabsContent value="editor" className="flex-1 mt-4">
-              <Suspense fallback={<LoadingSkeleton />}>
-                {mounted && <MarkdownEditor value={markdown} onChange={setMarkdown} />}
-              </Suspense>
-            </TabsContent>
-            <TabsContent value="preview" className="flex-1 mt-4">
-              <Suspense fallback={<LoadingSkeleton />}>
-                {mounted && <MarkdownPreview html={parsedHtml} loading={parsing} />}
-              </Suspense>
-            </TabsContent>
-            <TabsContent value="pdf" className="flex-1 mt-4">
-              <Suspense fallback={<LoadingSkeleton />}>
-                {mounted && activeTab === "pdf" && (
-                  <PDFViewer
-                    markdown={markdown}
-                    html={parsedHtml}
-                    options={pdfOptions}
-                    shouldGenerate={true}
-                  />
-                )}
-              </Suspense>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </main>
     </div>
   )
 }

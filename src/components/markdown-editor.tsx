@@ -1,34 +1,8 @@
 "use client"
 
-import React, { useCallback, useState, useMemo } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import React, { useCallback, useId, useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { 
-  Upload, 
-  Bold, 
-  Italic, 
-  Code, 
-  Link2, 
-  List, 
-  Quote,
-  Heading1,
-  Heading2,
-  FileDown,
-  Copy,
-  Check
-} from "lucide-react"
-import { toast } from "sonner"
-import { fadeIn, scaleIn, buttonHoverSubtle } from "@/lib/animations"
 
 interface MarkdownEditorProps {
   value: string
@@ -44,15 +18,7 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
   disabled = false,
 }: MarkdownEditorProps) {
   const [isDragging, setIsDragging] = useState(false)
-  const [copied, setCopied] = useState(false)
-
-  // Calculate word and character count
-  const stats = useMemo(() => {
-    const words = value.trim() ? value.trim().split(/\s+/).length : 0
-    const characters = value.length
-    const lines = value.split('\n').length
-    return { words, characters, lines }
-  }, [value])
+  const fileInputId = useId()
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -62,7 +28,7 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
   )
 
   const handleDrop = useCallback(
-    (e: React.DragEvent) => {
+    (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault()
       setIsDragging(false)
 
@@ -81,7 +47,7 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
     [onChange]
   )
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
+  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     setIsDragging(true)
   }, [])
@@ -105,78 +71,52 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
     [onChange]
   )
 
-  const insertFormatting = useCallback(
-    (prefix: string, suffix: string = "") => {
-      const textarea = document.querySelector("textarea")
-      if (!textarea) return
-
-      const start = textarea.selectionStart
-      const end = textarea.selectionEnd
-      const selectedText = value.substring(start, end)
-      const newText =
-        value.substring(0, start) +
-        prefix +
-        selectedText +
-        suffix +
-        value.substring(end)
-
-      onChange(newText)
-
-      // Restore selection
-      setTimeout(() => {
-        textarea.focus()
-        textarea.setSelectionRange(
-          start + prefix.length,
-          end + prefix.length
-        )
-      }, 0)
-    },
-    [value, onChange]
-  )
-
   return (
-    <div className="h-full flex flex-col border rounded-lg bg-card">
-      <div className="px-4 py-3 border-b flex items-center justify-between bg-muted/30">
-        <span className="text-xs font-medium text-muted-foreground">Editor</span>
-        <div className="flex gap-2 items-center">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020]/80 shadow-[0_10px_60px_-35px_rgba(15,23,42,0.9)] backdrop-blur">
+      <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.04] px-4 py-3">
+        <span className="font-mono text-[11px] uppercase tracking-[0.35em] text-slate-400">
+          Editor
+        </span>
+        <div className="flex items-center gap-2">
           <input
+            id={fileInputId}
             type="file"
             accept=".md"
             onChange={handleFileUpload}
             className="hidden"
-            id="file-upload"
           />
           <Button
+            type="button"
             variant="ghost"
             size="sm"
-            onClick={() => document.getElementById("file-upload")?.click()}
-            className="h-7 px-2 text-xs"
+            onClick={() => document.getElementById(fileInputId)?.click()}
+            className="h-7 rounded-full border border-white/10 px-3 text-[11px] uppercase tracking-[0.3em] text-slate-300 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-slate-100"
           >
-            Upload
+            Upload .md
           </Button>
         </div>
       </div>
-      
+
       <div
-        className="flex-1 overflow-hidden"
+        className="relative flex-1"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
       >
-        {isDragging ? (
-          <div className="flex items-center justify-center h-full text-muted-foreground bg-muted/50">
-            Drop your .md file here
+        {isDragging && (
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center border border-cyan-400/40 bg-cyan-500/10 text-sm font-medium text-cyan-200">
+            Drop your markdown file to import
           </div>
-        ) : (
-          <Textarea
-            id="markdown-editor"
-            value={value}
-            onChange={handleChange}
-            placeholder={placeholder}
-            disabled={disabled}
-            className="w-full h-full font-mono text-sm resize-none border-0 focus-visible:ring-0 rounded-none p-4"
-          />
         )}
+
+        <Textarea
+          id="markdown-editor"
+          value={value}
+          onChange={handleChange}
+          placeholder={placeholder}
+          disabled={disabled}
+          className="h-full min-h-[400px] w-full resize-none border-0 bg-transparent px-6 py-5 font-mono text-sm leading-relaxed text-slate-100 placeholder:text-slate-500 focus-visible:ring-0 focus-visible:ring-offset-0"
+        />
       </div>
     </div>
   )

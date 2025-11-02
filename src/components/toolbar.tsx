@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -9,17 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
-import { Card } from "@/components/ui/card"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 import type { StylePreset } from "@/lib/markdown/types"
-import { staggerContainer, staggerItem, buttonHoverSubtle } from "@/lib/animations"
-import { Palette, FileType, FileText, Trash2 } from "lucide-react"
 
 interface ToolbarProps {
   stylePreset: StylePreset
@@ -158,16 +147,19 @@ export function Toolbar({
   onLoadTemplate,
 }: ToolbarProps) {
   return (
-    <div className="flex flex-wrap gap-4 items-center text-sm">
-      <div className="flex items-center gap-2">
-        <Label htmlFor="style-preset" className="text-muted-foreground">
+    <div className="flex flex-wrap items-center gap-3 text-xs">
+      <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-400">
+        <span className="font-mono text-[10px] tracking-[0.4em] text-slate-500">
           Style
-        </Label>
+        </span>
         <Select value={stylePreset} onValueChange={onStylePresetChange}>
-          <SelectTrigger id="style-preset" className="w-[140px] h-9">
-            <SelectValue />
+          <SelectTrigger
+            id="style-preset"
+            className="h-7 w-[120px] border-none bg-transparent px-0 text-sm font-medium tracking-normal text-slate-100 focus-visible:ring-0 focus-visible:ring-offset-0 data-[placeholder]:text-slate-500"
+          >
+            <SelectValue placeholder="Modern" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
             <SelectItem value="modern">Modern</SelectItem>
             <SelectItem value="github">GitHub</SelectItem>
             <SelectItem value="academic">Academic</SelectItem>
@@ -176,15 +168,18 @@ export function Toolbar({
         </Select>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Label htmlFor="page-size" className="text-muted-foreground">
+      <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-400">
+        <span className="font-mono text-[10px] tracking-[0.4em] text-slate-500">
           Size
-        </Label>
+        </span>
         <Select value={pageSize} onValueChange={onPageSizeChange}>
-          <SelectTrigger id="page-size" className="w-[100px] h-9">
-            <SelectValue />
+          <SelectTrigger
+            id="page-size"
+            className="h-7 w-[100px] border-none bg-transparent px-0 text-sm font-medium tracking-normal text-slate-100 focus-visible:ring-0 focus-visible:ring-offset-0 data-[placeholder]:text-slate-500"
+          >
+            <SelectValue placeholder="A4" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
             <SelectItem value="A4">A4</SelectItem>
             <SelectItem value="Letter">Letter</SelectItem>
             <SelectItem value="Legal">Legal</SelectItem>
@@ -192,15 +187,18 @@ export function Toolbar({
         </Select>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Label htmlFor="template" className="text-muted-foreground">
+      <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-400">
+        <span className="font-mono text-[10px] tracking-[0.4em] text-slate-500">
           Template
-        </Label>
+        </span>
         <Select onValueChange={onLoadTemplate}>
-          <SelectTrigger id="template" className="w-[140px] h-9">
+          <SelectTrigger
+            id="template"
+            className="h-7 w-[140px] border-none bg-transparent px-0 text-sm font-medium tracking-normal text-slate-100 focus-visible:ring-0 focus-visible:ring-offset-0 data-[placeholder]:text-slate-500"
+          >
             <SelectValue placeholder="None" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
             <SelectItem value="basic">Basic</SelectItem>
             <SelectItem value="resume">Resume</SelectItem>
             <SelectItem value="technical">Technical</SelectItem>
@@ -208,11 +206,11 @@ export function Toolbar({
         </Select>
       </div>
 
-      <Button 
-        variant="ghost" 
+      <Button
+        variant="ghost"
         size="sm"
         onClick={onClear}
-        className="h-9 text-muted-foreground hover:text-foreground"
+        className="h-9 rounded-full border border-white/10 bg-white/5 px-4 text-[11px] uppercase tracking-[0.3em] text-slate-400 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-slate-100"
       >
         Clear
       </Button>
