@@ -15,11 +15,7 @@ interface MarkdownPreviewProps {
 
 export const MarkdownPreview = React.memo(function MarkdownPreview({ html, loading = false }: MarkdownPreviewProps) {
   return (
-    <Card className="h-full flex flex-col border-0 shadow-none">
-      <div className="px-4 py-3 border-b">
-        <Label className="text-sm font-medium">Preview</Label>
-      </div>
-      
+    <div className="h-full flex flex-col border rounded-lg overflow-hidden bg-card">
       <div className="flex-1 p-6 overflow-auto">
         {html ? (
           <div
@@ -32,7 +28,7 @@ export const MarkdownPreview = React.memo(function MarkdownPreview({ html, loadi
           </div>
         )}
       </div>
-    </Card>
+    </div>
   )
 })
 

@@ -135,28 +135,7 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
   )
 
   return (
-    <Card className="h-full flex flex-col border-0 shadow-none">
-      <div className="px-4 py-3 border-b flex items-center justify-between">
-        <Label htmlFor="markdown-editor" className="text-sm font-medium">Editor</Label>
-        <div className="flex gap-1">
-          <input
-            type="file"
-            accept=".md"
-            onChange={handleFileUpload}
-            className="hidden"
-            id="file-upload"
-          />
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => document.getElementById("file-upload")?.click()}
-            className="h-7 px-2 text-xs"
-          >
-            Upload
-          </Button>
-        </div>
-      </div>
-      
+    <div className="h-full flex flex-col border rounded-lg overflow-hidden bg-card relative">
       <div
         className={`flex-1 p-0 ${isDragging ? "bg-muted/50" : ""}`}
         onDrop={handleDrop}
@@ -174,11 +153,29 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
             onChange={handleChange}
             placeholder={placeholder}
             disabled={disabled}
-            className="w-full h-full min-h-[400px] font-mono text-sm resize-none border-0 focus-visible:ring-0 rounded-none"
+            className="w-full h-full min-h-[400px] font-mono text-sm resize-none border-0 focus-visible:ring-0 rounded-none p-6"
           />
         )}
       </div>
-    </Card>
+      
+      <div className="absolute top-4 right-4 flex gap-2">
+        <input
+          type="file"
+          accept=".md"
+          onChange={handleFileUpload}
+          className="hidden"
+          id="file-upload"
+        />
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => document.getElementById("file-upload")?.click()}
+          className="shadow-sm"
+        >
+          Upload .md
+        </Button>
+      </div>
+    </div>
   )
 })
 

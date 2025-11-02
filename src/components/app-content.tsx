@@ -196,10 +196,10 @@ export default function AppContent() {
     <div className="min-h-screen flex flex-col bg-background">
       {/* Minimal header */}
       <header className="border-b">
-        <div className="container mx-auto px-6 py-4">
+        <div className="container mx-auto px-6 py-5">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-semibold">
-              Markdown to PDF
+            <h1 className="text-2xl font-bold tracking-tight">
+              markdown → pdf
             </h1>
             <ThemeToggle />
           </div>
@@ -207,8 +207,8 @@ export default function AppContent() {
       </header>
 
       {/* Toolbar */}
-      <div className="border-b">
-        <div className="container mx-auto px-6 py-3">
+      <div className="border-b bg-muted/20">
+        <div className="container mx-auto px-6 py-4">
           <Toolbar
             stylePreset={stylePreset}
             onStylePresetChange={(preset) => setStylePreset(preset)}
@@ -223,7 +223,7 @@ export default function AppContent() {
       {/* Main Content - Desktop: 3 panels, Mobile: Tabs */}
       <main className="flex-1 container mx-auto px-6 py-8">
         {/* Desktop Layout: 3 equal panels */}
-        <div className="hidden lg:grid lg:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
+        <div className="hidden lg:grid lg:grid-cols-3 gap-6 h-[calc(100vh-210px)]">
           <div className="overflow-hidden">
             <Suspense fallback={<LoadingSkeleton />}>
               {mounted && <MarkdownEditor value={markdown} onChange={setMarkdown} />}
