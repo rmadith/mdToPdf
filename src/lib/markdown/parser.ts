@@ -27,7 +27,7 @@ export async function parseMarkdown(
 
   try {
     // Build the unified processor pipeline
-    let processor = unified().use(remarkParse)
+    let processor = unified().use(remarkParse) as any
 
     // Add GitHub Flavored Markdown support
     if (gfm) {

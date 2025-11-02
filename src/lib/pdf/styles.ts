@@ -55,7 +55,7 @@ const baseStyles = {
   },
   link: {
     color: '#0066cc',
-    textDecoration: 'underline',
+    textDecoration: 'underline' as const,
   },
   list: {
     marginBottom: 10,
@@ -197,8 +197,8 @@ const academicStyles = StyleSheet.create({
     fontFamily: 'Times-Italic',
   },
   link: {
-    ...baseStyles.link,
     color: '#000080',
+    textDecoration: 'underline' as const,
   },
   blockquote: {
     ...baseStyles.blockquote,
@@ -253,8 +253,8 @@ const modernStyles = StyleSheet.create({
     color: '#93c5fd',
   },
   link: {
-    ...baseStyles.link,
     color: '#2563eb',
+    textDecoration: 'underline' as const,
   },
   blockquote: {
     ...baseStyles.blockquote,
@@ -305,9 +305,8 @@ const minimalStyles = StyleSheet.create({
     fontSize: 16,
   },
   link: {
-    ...baseStyles.link,
     color: '#000000',
-    textDecoration: 'underline',
+    textDecoration: 'underline' as const,
   },
   blockquote: {
     ...baseStyles.blockquote,
