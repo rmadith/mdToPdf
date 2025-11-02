@@ -1,0 +1,145 @@
+# Cursor AI Configuration for Markdown to PDF Converter
+
+## Project Overview
+This is a Next.js application that converts markdown to professionally formatted PDFs with support for extended markdown features including math formulas, diagrams, syntax highlighting, and more.
+
+## Technology Stack
+- **Framework**: Next.js 14+ (App Router)
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **Markdown Processing**: unified/remark/rehype ecosystem
+- **PDF Generation**: @react-pdf/renderer
+
+## Code Style Guidelines
+
+### TypeScript
+- Always use TypeScript strict mode
+- Prefer interfaces over types for object shapes
+- Use explicit return types for functions
+- Avoid `any` - use `unknown` if type is truly unknown
+- Use const assertions where appropriate
+- Prefer functional components with hooks
+
+### File Naming
+- Use kebab-case for file names: `markdown-editor.tsx`, `pdf-generator.ts`
+- Use PascalCase for component files: components should match their export
+- Use `.tsx` for files containing JSX, `.ts` for pure TypeScript
+- Use descriptive names that indicate purpose
+
+### Component Structure
+- Use shadcn/ui components whenever possible
+- Follow the composition pattern
+- Keep components focused and single-purpose
+- Use `"use client"` directive only when necessary (interactivity, hooks)
+- Prefer server components by default
+- Extract reusable logic into custom hooks in `src/hooks/`
+
+### Code Organization
+```
+src/
+├── app/              # Next.js App Router pages
+├── components/       # React components
+│   ├── ui/          # shadcn components (auto-generated)
+│   └── *.tsx        # Custom components
+├── lib/             # Core business logic
+│   ├── markdown/    # Markdown processing
+│   ├── pdf/         # PDF generation
+│   └── utils.ts     # Utility functions
+└── hooks/           # Custom React hooks
+```
+
+### Import Order
+1. React and Next.js imports
+2. Third-party libraries
+3. Local components
+4. Local utilities and types
+5. Styles
+
+### Performance Guidelines
+- Use dynamic imports for heavy dependencies (mermaid, katex)
+- Implement proper memoization with React.memo, useMemo, useCallback
+- Debounce expensive operations (markdown parsing, PDF generation)
+- Use Next.js Image component for images
+- Minimize client-side JavaScript
+- Use Web Workers for CPU-intensive tasks
+
+### Git Workflow
+- Work on feature branches: `feature/feature-name`
+- Use conventional commits:
+  - `feat:` for new features
+  - `fix:` for bug fixes
+  - `docs:` for documentation
+  - `style:` for formatting
+  - `refactor:` for code refactoring
+  - `perf:` for performance improvements
+  - `test:` for tests
+  - `chore:` for maintenance
+- Write clear, descriptive commit messages
+- Merge to `main` after testing
+- Delete feature branches after merge
+
+### Component Example
+```typescript
+"use client"
+
+import { useState, useCallback } from "react"
+import { Button } from "@/components/ui/button"
+import { parseMarkdown } from "@/lib/markdown/parser"
+
+interface MarkdownEditorProps {
+  initialValue?: string
+  onChange?: (value: string) => void
+}
+
+export function MarkdownEditor({ 
+  initialValue = "", 
+  onChange 
+}: MarkdownEditorProps) {
+  const [value, setValue] = useState(initialValue)
+
+  const handleChange = useCallback((newValue: string) => {
+    setValue(newValue)
+    onChange?.(newValue)
+  }, [onChange])
+
+  return (
+    <div className="flex flex-col gap-4">
+      <textarea 
+        value={value}
+        onChange={(e) => handleChange(e.target.value)}
+        className="min-h-[400px] p-4 border rounded-md"
+      />
+    </div>
+  )
+}
+```
+
+## Best Practices
+- Always handle errors gracefully
+- Provide loading states for async operations
+- Make UI accessible (ARIA labels, keyboard navigation)
+- Optimize for mobile and tablet
+- Test with various markdown samples
+- Document complex logic with comments
+- Keep functions small and focused
+- Use TypeScript to catch errors at compile time
+- Prefer composition over inheritance
+- Write self-documenting code
+
+## Testing Guidelines
+- Test components in isolation
+- Test edge cases (empty input, very large files)
+- Verify performance benchmarks
+- Use Chrome DevTools for profiling
+- Check bundle size regularly
+- Test across browsers (Chrome, Firefox, Safari, Edge)
+
+## When Adding Dependencies
+- Prefer lightweight libraries
+- Check bundle size impact
+- Verify tree-shaking support
+- Check maintenance status
+- Consider security implications
+- Document why the dependency is needed
+
