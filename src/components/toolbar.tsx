@@ -147,70 +147,46 @@ export function Toolbar({
   onLoadTemplate,
 }: ToolbarProps) {
   return (
-    <div className="flex flex-wrap items-center gap-3 text-xs">
-      <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-400">
-        <span className="font-mono text-[10px] tracking-[0.4em] text-slate-500">
-          Style
-        </span>
-        <Select value={stylePreset} onValueChange={onStylePresetChange}>
-          <SelectTrigger
-            id="style-preset"
-            className="h-7 w-[120px] border-none bg-transparent px-0 text-sm font-medium tracking-normal text-slate-100 focus-visible:ring-0 focus-visible:ring-offset-0 data-[placeholder]:text-slate-500"
-          >
-            <SelectValue placeholder="Modern" />
-          </SelectTrigger>
-          <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
-            <SelectItem value="modern">Modern</SelectItem>
-            <SelectItem value="github">GitHub</SelectItem>
-            <SelectItem value="academic">Academic</SelectItem>
-            <SelectItem value="minimal">Minimal</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+    <div className="flex items-center gap-4 text-xs">
+      <Select value={stylePreset} onValueChange={onStylePresetChange}>
+        <SelectTrigger className="h-8 w-[110px] border-white/10 bg-transparent text-xs text-slate-300">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
+          <SelectItem value="modern">Modern</SelectItem>
+          <SelectItem value="github">GitHub</SelectItem>
+          <SelectItem value="academic">Academic</SelectItem>
+          <SelectItem value="minimal">Minimal</SelectItem>
+        </SelectContent>
+      </Select>
 
-      <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-400">
-        <span className="font-mono text-[10px] tracking-[0.4em] text-slate-500">
-          Size
-        </span>
-        <Select value={pageSize} onValueChange={onPageSizeChange}>
-          <SelectTrigger
-            id="page-size"
-            className="h-7 w-[100px] border-none bg-transparent px-0 text-sm font-medium tracking-normal text-slate-100 focus-visible:ring-0 focus-visible:ring-offset-0 data-[placeholder]:text-slate-500"
-          >
-            <SelectValue placeholder="A4" />
-          </SelectTrigger>
-          <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
-            <SelectItem value="A4">A4</SelectItem>
-            <SelectItem value="Letter">Letter</SelectItem>
-            <SelectItem value="Legal">Legal</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <Select value={pageSize} onValueChange={onPageSizeChange}>
+        <SelectTrigger className="h-8 w-[80px] border-white/10 bg-transparent text-xs text-slate-300">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
+          <SelectItem value="A4">A4</SelectItem>
+          <SelectItem value="Letter">Letter</SelectItem>
+          <SelectItem value="Legal">Legal</SelectItem>
+        </SelectContent>
+      </Select>
 
-      <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-400">
-        <span className="font-mono text-[10px] tracking-[0.4em] text-slate-500">
-          Template
-        </span>
-        <Select onValueChange={onLoadTemplate}>
-          <SelectTrigger
-            id="template"
-            className="h-7 w-[140px] border-none bg-transparent px-0 text-sm font-medium tracking-normal text-slate-100 focus-visible:ring-0 focus-visible:ring-offset-0 data-[placeholder]:text-slate-500"
-          >
-            <SelectValue placeholder="None" />
-          </SelectTrigger>
-          <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
-            <SelectItem value="basic">Basic</SelectItem>
-            <SelectItem value="resume">Resume</SelectItem>
-            <SelectItem value="technical">Technical</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <Select onValueChange={onLoadTemplate}>
+        <SelectTrigger className="h-8 w-[110px] border-white/10 bg-transparent text-xs text-slate-300">
+          <SelectValue placeholder="Template" />
+        </SelectTrigger>
+        <SelectContent className="border-white/10 bg-[#0b1020] text-slate-100">
+          <SelectItem value="basic">Basic</SelectItem>
+          <SelectItem value="resume">Resume</SelectItem>
+          <SelectItem value="technical">Technical</SelectItem>
+        </SelectContent>
+      </Select>
 
       <Button
         variant="ghost"
         size="sm"
         onClick={onClear}
-        className="h-9 rounded-full border border-white/10 bg-white/5 px-4 text-[11px] uppercase tracking-[0.3em] text-slate-400 transition-all duration-200 hover:scale-105 hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-300 hover:shadow-[0_0_20px_-10px_rgba(239,68,68,0.5)]"
+        className="h-8 px-3 text-xs text-slate-400 transition-colors hover:text-red-300"
       >
         Clear
       </Button>

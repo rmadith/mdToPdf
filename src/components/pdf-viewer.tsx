@@ -118,18 +118,18 @@ export function PDFViewer({ markdown, html, options = {}, shouldGenerate = true 
   }
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020]/80 shadow-[0_10px_60px_-35px_rgba(15,23,42,0.9)] backdrop-blur transition-all duration-300 hover:shadow-[0_10px_60px_-25px_rgba(56,189,248,0.2)]">
-      <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.04] px-4 py-3 transition-colors group-hover:bg-white/[0.06]">
-        <span className="font-mono text-[11px] uppercase tracking-[0.35em] text-slate-400 transition-colors group-hover:text-slate-300">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-[#0b1020]/60 backdrop-blur">
+      <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
+        <span className="text-xs font-medium text-slate-500">
           PDF
         </span>
-        <div className="opacity-70 transition-opacity group-hover:opacity-100">
+        <div className="opacity-0 transition-opacity group-hover:opacity-100">
           <Button
             onClick={handleDownload}
             disabled={!pdfResult || loading}
             variant="ghost"
             size="sm"
-            className="h-7 rounded-full border border-white/10 px-3 text-[11px] uppercase tracking-[0.3em] text-slate-300 transition-all duration-200 hover:scale-105 hover:border-emerald-400/40 hover:bg-emerald-500/10 hover:text-emerald-200 hover:shadow-[0_0_20px_-5px_rgba(16,185,129,0.5)] disabled:opacity-30 disabled:hover:scale-100 disabled:hover:border-white/10 disabled:hover:bg-transparent disabled:hover:text-slate-300 disabled:hover:shadow-none"
+            className="h-7 px-2 text-xs text-slate-400 transition-colors hover:text-cyan-300 disabled:opacity-30"
           >
             Download
           </Button>
@@ -164,17 +164,8 @@ export function PDFViewer({ markdown, html, options = {}, shouldGenerate = true 
         )}
         
         {!loading && !pdfResult && !error && (
-          <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
-            <div className="space-y-3 text-slate-500">
-              <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-[0.25em]">
-                <div className="h-px w-8 bg-gradient-to-r from-transparent to-slate-600" />
-                <span>PDF output</span>
-                <div className="h-px w-8 bg-gradient-to-l from-transparent to-slate-600" />
-              </div>
-              <p className="text-[11px] leading-relaxed">
-                Your compiled PDF appears here, ready to download
-              </p>
-            </div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <p className="text-xs text-slate-600">PDF</p>
           </div>
         )}
         
