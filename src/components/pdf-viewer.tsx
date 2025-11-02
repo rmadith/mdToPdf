@@ -118,8 +118,21 @@ export function PDFViewer({ markdown, html, options = {}, shouldGenerate = true 
   }
 
   return (
-    <div className="h-full flex flex-col border rounded-lg overflow-hidden bg-card">
-      <div className="flex-1 overflow-auto relative">
+    <div className="h-full flex flex-col border rounded-lg bg-card">
+      <div className="px-4 py-3 border-b flex items-center justify-between bg-muted/30">
+        <span className="text-xs font-medium text-muted-foreground">PDF</span>
+        <Button
+          onClick={handleDownload}
+          disabled={!pdfResult || loading}
+          variant="ghost"
+          size="sm"
+          className="h-7 px-2 text-xs"
+        >
+          Download
+        </Button>
+      </div>
+      
+      <div className="flex-1 overflow-auto relative bg-muted/5">
         {error && (
           <div className="absolute inset-0 flex items-center justify-center text-center text-muted-foreground text-sm p-8">
             <div>
@@ -142,22 +155,11 @@ export function PDFViewer({ markdown, html, options = {}, shouldGenerate = true 
         )}
         
         {pdfResult && !error && (
-          <>
-            <iframe
-              src={`${pdfResult.url}#toolbar=0&navpanes=0&scrollbar=0`}
-              className="w-full h-full"
-              title="PDF Preview"
-            />
-            <div className="absolute bottom-4 right-4">
-              <Button
-                onClick={handleDownload}
-                size="sm"
-                className="shadow-lg"
-              >
-                Download PDF
-              </Button>
-            </div>
-          </>
+          <iframe
+            src={`${pdfResult.url}#toolbar=0&navpanes=0&scrollbar=0`}
+            className="w-full h-full"
+            title="PDF Preview"
+          />
         )}
       </div>
     </div>

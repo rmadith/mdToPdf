@@ -135,15 +135,36 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
   )
 
   return (
-    <div className="h-full flex flex-col border rounded-lg overflow-hidden bg-card relative">
+    <div className="h-full flex flex-col border rounded-lg bg-card">
+      <div className="px-4 py-3 border-b flex items-center justify-between bg-muted/30">
+        <span className="text-xs font-medium text-muted-foreground">Editor</span>
+        <div className="flex gap-2 items-center">
+          <input
+            type="file"
+            accept=".md"
+            onChange={handleFileUpload}
+            className="hidden"
+            id="file-upload"
+          />
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => document.getElementById("file-upload")?.click()}
+            className="h-7 px-2 text-xs"
+          >
+            Upload
+          </Button>
+        </div>
+      </div>
+      
       <div
-        className={`flex-1 p-0 ${isDragging ? "bg-muted/50" : ""}`}
+        className="flex-1 overflow-hidden"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
       >
         {isDragging ? (
-          <div className="flex items-center justify-center h-full text-muted-foreground">
+          <div className="flex items-center justify-center h-full text-muted-foreground bg-muted/50">
             Drop your .md file here
           </div>
         ) : (
@@ -153,27 +174,9 @@ export const MarkdownEditor = React.memo(function MarkdownEditor({
             onChange={handleChange}
             placeholder={placeholder}
             disabled={disabled}
-            className="w-full h-full min-h-[400px] font-mono text-sm resize-none border-0 focus-visible:ring-0 rounded-none p-6"
+            className="w-full h-full font-mono text-sm resize-none border-0 focus-visible:ring-0 rounded-none p-4"
           />
         )}
-      </div>
-      
-      <div className="absolute top-4 right-4 flex gap-2">
-        <input
-          type="file"
-          accept=".md"
-          onChange={handleFileUpload}
-          className="hidden"
-          id="file-upload"
-        />
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => document.getElementById("file-upload")?.click()}
-          className="shadow-sm"
-        >
-          Upload .md
-        </Button>
       </div>
     </div>
   )
