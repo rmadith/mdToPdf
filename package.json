@@ -1,7 +1,29 @@
 {
   "name": "mdtopdf",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "description": "Transform Markdown documents into beautifully formatted PDFs with extended features support",
+  "main": "src/lib/index.ts",
+  "types": "src/lib/index.ts",
+  "exports": {
+    ".": "./src/lib/index.ts",
+    "./components": "./src/components/index.ts",
+    "./hooks": "./src/hooks/index.ts"
+  },
+  "keywords": [
+    "markdown",
+    "pdf",
+    "converter",
+    "react",
+    "nextjs",
+    "typescript"
+  ],
+  "author": "Markdown to PDF Converter",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/mdtopdf"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
