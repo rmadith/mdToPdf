@@ -209,19 +209,16 @@ mdtopdf/
 │   │   └── toolbar.tsx
 │   ├── lib/                   # Core library
 │   │   ├── markdown/         # Markdown processing
-│   │   │   ├── parser.ts
-│   │   │   ├── pdf-generator.ts
-│   │   │   └── types.ts
-│   │   └── pdf/              # PDF styling
-│   │       ├── document.tsx
-│   │       └── styles.ts
+│   │   ├── pdf/              # PDF styling
+│   │   └── theme-manager.ts  # Custom theme system
 │   └── hooks/                # Custom React hooks
-│       ├── use-markdown-parser.ts
-│       ├── use-pdf-generator.ts
-│       └── use-debounce.ts
-├── .cursorrules              # Cursor AI configuration
-├── Agents.md                 # AI agent instructions
-├── PERFORMANCE.md            # Performance guide
+├── docs/                      # Documentation
+│   ├── CONTRIBUTING.md       # Contribution guidelines
+│   ├── CUSTOM_THEMES.md      # Custom themes guide
+│   ├── DEPLOYMENT.md         # Deployment instructions
+│   ├── EMBEDDING.md          # Embedding/integration guide
+│   ├── EXAMPLES.md           # Code examples
+│   └── PERFORMANCE.md        # Performance optimization
 └── README.md                 # This file
 ```
 
@@ -247,11 +244,11 @@ This application is optimized for maximum performance:
 - **Time to Interactive**: < 2.5s
 - **Lighthouse Score**: 95+
 
-See [PERFORMANCE.md](./PERFORMANCE.md) for detailed performance metrics and optimization guide.
+See [docs/PERFORMANCE.md](./docs/PERFORMANCE.md) for detailed performance metrics and optimization guide.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+Contributions are welcome! Please read [docs/CONTRIBUTING.md](./docs/CONTRIBUTING.md) for guidelines.
 
 ### Development Workflow
 
@@ -293,14 +290,26 @@ Have an idea? We'd love to hear it! Open a feature request on [GitHub Issues](ht
 - GitHub: [@yourusername](https://github.com/yourusername)
 - Email: your.email@example.com
 
+## 📚 Documentation
+
+- **[Getting Started](./README.md)** - This file
+- **[Custom Themes Guide](./docs/CUSTOM_THEMES.md)** - Create and manage custom PDF themes
+- **[Embedding Guide](./docs/EMBEDDING.md)** - Use as a library in your projects
+- **[Code Examples](./docs/EXAMPLES.md)** - Practical examples and use cases
+- **[Performance Guide](./docs/PERFORMANCE.md)** - Optimization tips and metrics
+- **[Contributing](./docs/CONTRIBUTING.md)** - How to contribute
+- **[Deployment](./docs/DEPLOYMENT.md)** - Deploy to production
+
 ## 🗺️ Roadmap
 
+- [x] Custom PDF themes with visual editor
+- [x] Math formula support with KaTeX
+- [x] Syntax highlighting for code blocks
+- [x] Export/import theme system
 - [ ] Web Workers for markdown parsing
 - [ ] Mermaid diagram support
-- [ ] Custom CSS themes
 - [ ] PDF watermark support
 - [ ] Batch conversion
-- [ ] API endpoint for programmatic use
 - [ ] Browser extension
 
 ---
