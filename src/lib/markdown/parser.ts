@@ -1,12 +1,5 @@
-import { unified } from 'unified'
-import remarkParse from 'remark-parse'
-import remarkGfm from 'remark-gfm'
-import remarkMath from 'remark-math'
-import remarkRehype from 'remark-rehype'
-import rehypeKatex from 'rehype-katex'
-import rehypeStringify from 'rehype-stringify'
-import rehypeRaw from 'rehype-raw'
 import type { MarkdownOptions, ParsedMarkdown } from './types'
+import { containsMath, loadKatexCSS } from '../dynamic-loader'
 
 /**
  * Parse markdown string to HTML with extended features support
@@ -26,35 +19,68 @@ export async function parseMarkdown(
   } = options
 
   try {
+    // Dynamic imports for heavy dependencies
+    const [
+      { unified },
+      { default: remarkParse },
+      { default: remarkRehype },
+      { default: rehypeStringify }
+    ] = await Promise.all([
+      import('unified'),
+      import('remark-parse'),
+      import('remark-rehype'),
+      import('rehype-stringify')
+    ]);
+
     // Build the unified processor pipeline
     let processor = unified().use(remarkParse) as any
 
-    // Add GitHub Flavored Markdown support
+    // Add GitHub Flavored Markdown support (dynamic)
     if (gfm) {
+      const { default: remarkGfm } = await import('remark-gfm');
       processor = processor.use(remarkGfm)
     }
 
-    // Add math support
-    if (math) {
-      processor = processor.use(remarkMath)
-    }
-
-    // Convert to rehype (HTML AST)
-    processor = processor.use(remarkRehype, { 
-      allowDangerousHtml: !sanitize 
-    })
-
-    // Add raw HTML support if not sanitizing
-    if (!sanitize) {
-      processor = processor.use(rehypeRaw)
-    }
-
-    // Add KaTeX for math rendering
-    if (math) {
+    // Add math support only if markdown contains math
+    const hasMath = math && containsMath(markdown);
+    if (hasMath) {
+      const [{ default: remarkMath }, { default: rehypeKatex }] = await Promise.all([
+        import('remark-math'),
+        import('rehype-katex')
+      ]);
+      processor = processor.use(remarkMath);
+      
+      // Load KaTeX CSS on client side
+      if (typeof window !== 'undefined') {
+        loadKatexCSS();
+      }
+      
+      // Add KaTeX for math rendering later
+      processor = processor.use(remarkRehype, { 
+        allowDangerousHtml: !sanitize 
+      });
+      
+      // Add raw HTML support if not sanitizing
+      if (!sanitize) {
+        const { default: rehypeRaw } = await import('rehype-raw');
+        processor = processor.use(rehypeRaw);
+      }
+      
       processor = processor.use(rehypeKatex, {
         throwOnError: false,
         strict: false,
-      })
+      });
+    } else {
+      // Convert to rehype (HTML AST)
+      processor = processor.use(remarkRehype, { 
+        allowDangerousHtml: !sanitize 
+      });
+
+      // Add raw HTML support if not sanitizing
+      if (!sanitize) {
+        const { default: rehypeRaw } = await import('rehype-raw');
+        processor = processor.use(rehypeRaw);
+      }
     }
 
     // Convert to HTML string

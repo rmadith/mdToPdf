@@ -23,8 +23,21 @@ const nextConfig: NextConfig = {
       "unified",
       "rehype-katex",
       "react-syntax-highlighter",
+      "remark-gfm",
+      "remark-math",
+      "lucide-react",
+      "@radix-ui/react-tabs",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-select",
     ],
   },
+  
+  // Turbopack configuration (Next.js 16+)
+  turbopack: {},
+  
+  // Production-only optimizations
+  productionBrowserSourceMaps: false,
+  reactStrictMode: true,
 };
 
 // Wrap with bundle analyzer in development/analysis mode
